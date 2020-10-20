@@ -1,0 +1,73 @@
+-------------------------- MasterMen's Update:--------------------------
+
+CSPSP 1.92+ rev 9 (1.05.2018)
+[ADDED] Ability to change Game Modes
+[ADDED] New page in the options (it's useless)
+[ADDED] Custom changing round's time (you will need to edit file "GameSettings.cfg")
+[ADDED] Ability to change controlls information: In-game, spectator.
+[ADDED] "Contact" information in credits
+[ADDED] Changelog (lol)
+[CHANGED] Credits menu
+[CHANGED] P90's Damage +2 (14 Damage)
+[CHANGED] Page selection's button from white to yellow
+[CHANGED] All signs
+[CHANGED] Music's name and path
+[RENAMED] Description to the exit button
+
+* CTF and FFA is not working correctly, but i'll fix it later...
+
+
+
+-------------------------- UnLuck3R's Updates: --------------------------
+
+CSPSP 1.92+ rev7.1
+vCMS is back!!!(Vlad's Custom Master Server, now with full support I think)
+
+CSPSP 1.92+ rev7
+-improved GunMode and change ''how to turn it on/off''.(old: dir-pad left / new: hold L+R)
+-added Kill effect (sound and hud)
+
+CSPSP 1.92+ rev6
+-added some Fun stuff (when u kill someone by knife, it will appear "Humiliation!!!" sound and Hud etc.)
+-when your HP < 20, HP font will change to red.
+-updated Snipe mode. (weaken, made some change and added sound)(now i call it GunMode, cuz maybe ill add something else not only zoom in)
+-updated dying tips. (now you can see screen gradual change)
+-added and improved HP Regeneration.(thanks Peris and Kamil)
+-master server re-open again. :D (this time was set up by tinyland.co)
+
+CSPSP 1.92+ rev5
+-updated admin menu.
+-updated dying tips.
+
+CSPSP 1.92+ r1,r2,r3,r4
+-bots can buy ammo.
+-added sound effect when round start.(Go go go/ All right lets move out/ Ok lets go)
+-added PIC1 used original bg.
+-you can disable buy menu by "Dir-Pad-Down" too. (you cant do that after r6 since that will make bug appear with dir-pad menu)
+-re-open master server (thanks Vlad1k)
+-you can play online game mode without plugin now
+-added Snipe mode.
+-added dying tips.
+
+CSPSP 1.92+ rev6
+-Fix the Snipe Mode's bug.(fix when new round start still in snipe mode)
+-now you can see the other guys using snipe (u couldnt see it before, it was a major bug) still not fix yet...
+
+CSPSP 1.92+ rev5
+-fixed Snipe modes's bug, again.
+
+CSPSP 1.92+ rev4
+-Fixed Snipe mode's minor bug.
+-delete system message.(many player dont like it :( )
+
+CSPSP 1.92+ rev3
+-Fixed AWP and other snipe guns are too strong problem.
+
+CSPSP 1.92+ rev2
+-Fix Bluescreen bug.
+-Fix bug that you couldnt hear roundstart sound in multiplayer mode.
+
+This is not really the major update,
+so i named it CSPSP 1.92+.
+and im not the programmer/developer.
+but im the CSPSP's fan,

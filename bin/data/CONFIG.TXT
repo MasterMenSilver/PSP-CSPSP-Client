@@ -1,0 +1,6 @@
+movement = absolute
+music = on
+ff = off
+menu = analog
+name = MasterMen
+map = gunstest
