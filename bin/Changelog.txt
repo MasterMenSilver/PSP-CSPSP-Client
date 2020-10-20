@@ -1,6 +1,6 @@
 -------------------------- MasterMen's Update:--------------------------
 
-CSPSP 1.92+ rev 9 (1.05.2018)
+CSPSP 1.92 rev 9.0 (2018.05.01)
 [ADDED] Ability to change Game Modes
 [ADDED] New page in the options (it's useless)
 [ADDED] Custom changing round's time (you will need to edit file "GameSettings.cfg")
