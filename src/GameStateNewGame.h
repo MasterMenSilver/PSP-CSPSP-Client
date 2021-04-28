@@ -111,6 +111,7 @@ public:
 	void Start();
 	void End();
 	void Update(float dt);
+	void Load();
 	void Save();
 	void Render();
 

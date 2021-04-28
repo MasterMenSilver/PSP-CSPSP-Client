@@ -191,7 +191,7 @@ void GameStateMenu::Render()
 		gFont->SetScale(0.6f);
 		char buffer[10];
 		//sprintf(buffer,"%.2f",VERSION);
-		sprintf(buffer,"1.93");
+		sprintf(buffer,"1.94");
 		gFont->DrawString(buffer,SCREEN_WIDTH-4,SCREEN_HEIGHT-12,JGETEXT_RIGHT);
 	}
 	else if (mStage == STAGE_CREDITS)

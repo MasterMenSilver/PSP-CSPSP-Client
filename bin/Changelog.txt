@@ -6,16 +6,47 @@ YouTube: https://www.youtube.com/channel/UCHXvTt5-qVkstYNekBBYyaw
 
 -------------------------- MasterMen's Update:--------------------------
 
+CSPSP 1.95 To Do List:
+* Make "T Bots" and "CT Bots" Setting in Singleplayer Menu, instead "Max Bots"
+* Add 2 additional Soundtrack slots
+* Add Buy Time Setting in Singleplayer
+* Fix Bot's Buyzone (for example: CT Bots can buy AK-47)
+* Custom Regenerable HP Count (for example: 5 HP per Regen, 30 HP per Regen, 80 HP per Regen)
+* Make Rotate Sensitivity Settings
+* Singleplayer Stats (Bot Kills, Deaths, K/D Ratio, Fav. Weapon, Fav. Map)
+
+
+CSPSP 1.94 (2019.07.09)
+[ADDED] New Music3 - Electro Battle by Grey Boy
+[ADDED] Reset settings button in Singleplayer
+[ADDED] New Map - riverbig by MasterMen
+[ADDED] New Map - de_dust by MasterMen
+[CHANGED] MP5 Texture
+[CHANGED] P90 Texture
+[CHANGED] SG 552 Texture
+[CHANGED] M249 Texture
+[CHANGED] Scout Texture
+[CHANGED] M3 Testure
+[CHANGED] Galil Texture
+[CHANGED] M4A1 Texture
+[CHANGED] Knife Texture
+[CHANGED] Version's info (Right-Down Corner of screen) in main menu: Color changed from gray to white
+[CHANGED] Bots info in singleplayer: From "3","5' to "2 vs 2 (4)", "3 vs 3 (6)"
+[FIXED] that Regeneration Line in Singleplayer/Rules doesn't exist
+[FIXED] Singleplayer config and Music config Loading System
+
+* This is a mini update, that provides one design fix and some changes with game fixes.
+
+
 CSPSP 1.93 (2019.07.02)
 [ADDED] Ability to Change Time in-Game
 [ADDED] Ability to Change Bots Count
 [ADDED] Ability to change OFF/ON health regeneration
 [ADDED] Ability to change Soundtrack
 [ADDED] 2nd and 3rd Soundtrack
-[ADDED] New Map - FY_NADE2
-[ADDED] New Map - LASTERTAG3
+[ADDED] New Map - FY_NADE2 by MasterMen
+[ADDED] New Map - LASTERTAG3 by MasterMen
 [CHANGED] Every weapon's bullet speed is now +0.2
-[CHANGED] Credits (Testers, Other, Maps, Title)
 [FIXED] CS_ITALY waypoints
 [REMOVED] Ability to switch Game Modes (CTF and FFA is not working correctly with bots (I mean it's useless in singleplayer) )
 

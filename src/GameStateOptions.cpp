@@ -113,6 +113,24 @@ void GameStateOptions::Create()
 				
 				delete MusType;
 			}
+			
+			//LoadMusic
+			LoadMusic = 1;
+			char* LoadMus = GetConfig("data/MusicSettings.txt","LoadMusic");
+			if (LoadMus != NULL) {
+				if (strcmp(LoadMus,"1") == 0) {
+					LoadMusic = 1;
+				}
+				else if (strcmp(LoadMus,"2") == 0) {
+					LoadMusic = 2;
+				}
+				else if (strcmp(LoadMus,"3") == 0) {
+					LoadMusic = 3;
+				}
+				
+				delete LoadMus;
+			}
+			
 
 		Save();
 	}

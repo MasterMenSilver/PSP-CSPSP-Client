@@ -148,6 +148,7 @@ void GameStateNewGame::Update(float dt)
 				MapItem *item = (MapItem*)mMapsListBox->GetItem();
 				if (item != NULL) {
 					gMapName = item->name;
+					Load();
 					NGmState = Set;
 					return;
 				}
@@ -214,6 +215,27 @@ void GameStateNewGame::Update(float dt)
 	*/
 	
 	if(NGmState == Set) {
+		if (mEngine->GetButtonClick(PSP_CTRL_START)) {
+			GM = TDM;
+			NGGameTime = 12;
+			
+			MaxBots = -1;
+			CustomNames = false;
+			
+			AllowRegeneration = false;
+		}
+		
+		if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
+			Save();
+			NGmState = Map;
+		}
+		if (mEngine->GetButtonClick(PSP_CTRL_CROSS)) {
+			Save();
+			NGmState = Map;
+			mParent->SetNextState(GAME_STATE_PLAY);
+		}
+		
+		
 		if(NGmPage == NGGame) {
 			// Gamemode
 			if(NGmGame == NGGamemode) {
@@ -244,14 +266,11 @@ void GameStateNewGame::Update(float dt)
 				}
 				
 				
-				if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
-					NGmState = Map;
+				// Reset Gamemode
+				if (mEngine->GetButtonClick(PSP_CTRL_SELECT)) {
+					GM = TDM;
 				}
-				if (mEngine->GetButtonClick(PSP_CTRL_CROSS)) {
-					Save();
-					NGmState = Map;
-					mParent->SetNextState(GAME_STATE_PLAY);
-				}
+				
 			}
 			if(NGmGame == NGTime) {
 				if (mEngine->GetButtonClick(PSP_CTRL_LEFT)) {
@@ -276,15 +295,11 @@ void GameStateNewGame::Update(float dt)
 					//NGmGame = NGMulti;
 				}
 				
+				// Reset Time
+				if (mEngine->GetButtonClick(PSP_CTRL_SELECT)) {
+					NGGameTime = 12;
+				}
 				
-				if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
-					NGmState = Map;
-				}
-				if (mEngine->GetButtonClick(PSP_CTRL_CROSS)) {
-					Save();
-					NGmState = Map;
-					mParent->SetNextState(GAME_STATE_PLAY);
-				}
 			}
 			
 			/*
@@ -356,6 +371,12 @@ void GameStateNewGame::Update(float dt)
 				if (mEngine->GetButtonClick(PSP_CTRL_DOWN)) {
 					NGmBots = NGAllowCustomName;
 				}
+				
+				// Reset Bots Count
+				if (mEngine->GetButtonClick(PSP_CTRL_SELECT)) {
+					MaxBots = -1;
+				}
+				
 			}
 			if(NGmBots == NGAllowCustomName) {
 				if (mEngine->GetButtonClick(PSP_CTRL_LEFT)) {
@@ -372,7 +393,14 @@ void GameStateNewGame::Update(float dt)
 				if (mEngine->GetButtonClick(PSP_CTRL_DOWN)) {
 					NGmBots = NGDifficulty;
 				}
+				
+				// Reset Custom Name
+				if (mEngine->GetButtonClick(PSP_CTRL_SELECT)) {
+					CustomNames = false;
+				}
 			}
+			
+			// Bot's Difficulty
 			if(NGmBots == NGDifficulty) {
 				if (BotDiff == NoHarm) {
 					if (mEngine->GetButtonClick(PSP_CTRL_LEFT)) {
@@ -416,15 +444,6 @@ void GameStateNewGame::Update(float dt)
 				}
 			}
 			
-			if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
-				NGmState = Map;
-			}
-			if (mEngine->GetButtonClick(PSP_CTRL_CROSS)) {
-				Save();
-				NGmState = Map;
-				mParent->SetNextState(GAME_STATE_PLAY);
-			}
-			
 			if (mEngine->GetButtonClick(PSP_CTRL_RTRIGGER)) {
 				NGmPage = NGRules;
 			}
@@ -440,14 +459,6 @@ void GameStateNewGame::Update(float dt)
 		
 		// Rules Page
 		if(NGmPage == NGRules) {
-			if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
-				NGmState = Map;
-			}
-			if (mEngine->GetButtonClick(PSP_CTRL_CROSS)) {
-				Save();
-				NGmState = Map;
-				mParent->SetNextState(GAME_STATE_PLAY);
-			}
 			
 			if(NGmRules == NGAllowRegen) {
 				if (mEngine->GetButtonClick(PSP_CTRL_LEFT)) {
@@ -466,9 +477,181 @@ void GameStateNewGame::Update(float dt)
 				NGmPage = NGBots;
 			}
 			if (NGmRules != NGAllowRegen) { NGmRules = NGAllowRegen; }
+			
+			// Reset Regeneration Allowing
+			if (mEngine->GetButtonClick(PSP_CTRL_SELECT)) {
+				AllowRegeneration = false;
+			}
+			
+			
 		}
 	}
 }
+
+
+void GameStateNewGame::Load() {
+	
+	// Gamemode Load
+	GM = TDM;
+	char* GameM = GetConfig("data/MatchSettings.txt","Gamemode");
+	if (GameM != NULL) {
+		if (strcmp(GameM,"TDM") == 0) {
+			GM = TDM;
+		}
+		else if (strcmp(GameM,"CTF") == 0) {
+			GM = CTF;
+		}
+		else if (strcmp(GameM,"FFA") == 0) {
+			GM = FFA;
+		}
+		else if (strcmp(GameM,"ZM") == 0) {
+			GM = ZM;
+		}
+		delete GameM;
+	}
+	
+	// Round Time Load
+	NGGameTime = 1;
+	char* RoundT = GetConfig("data/MatchSettings.txt","RoundTime");
+	if (RoundT != NULL) {
+		if (strcmp(RoundT,"1") == 0) {
+			NGGameTime = 1;
+		}
+		else if (strcmp(RoundT,"2") == 0) {
+			NGGameTime = 2;
+		}
+		else if (strcmp(RoundT,"3") == 0) {
+			NGGameTime = 3;
+		}
+		else if (strcmp(RoundT,"4") == 0) {
+			NGGameTime = 4;
+		}
+		else if (strcmp(RoundT,"5") == 0) {
+			NGGameTime = 5;
+		}
+		else if (strcmp(RoundT,"6") == 0) {
+			NGGameTime = 6;
+		}
+		else if (strcmp(RoundT,"7") == 0) {
+			NGGameTime = 7;
+		}
+		else if (strcmp(RoundT,"8") == 0) {
+			NGGameTime = 8;
+		}
+		else if (strcmp(RoundT,"9") == 0) {
+			NGGameTime = 9;
+		}
+		else if (strcmp(RoundT,"10") == 0) {
+			NGGameTime = 10;
+		}
+		else if (strcmp(RoundT,"11") == 0) {
+			NGGameTime = 11;
+		}
+		else if (strcmp(RoundT,"12") == 0) {
+			NGGameTime = 12;
+		}
+		else if (strcmp(RoundT,"13") == 0) {
+			NGGameTime = 13;
+		}
+		else if (strcmp(RoundT,"14") == 0) {
+			NGGameTime = 14;
+		}
+		else if (strcmp(RoundT,"15") == 0) {
+			NGGameTime = 15;
+		}
+		else if (strcmp(RoundT,"16") == 0) {
+			NGGameTime = 16;
+		}
+		delete RoundT;
+	}
+	
+	// Max Bot Load
+	MaxBots = -1;
+	char* BotC = GetConfig("data/MatchSettings.txt","MaxBots");
+	if (BotC != NULL) {
+		if (strcmp(BotC,"-1") == 0) {
+			MaxBots = -1;
+		}
+		else if (strcmp(BotC,"0") == 0) {
+			MaxBots = 0;
+		}
+		else if (strcmp(BotC,"1") == 0) {
+			MaxBots = 2;
+		}
+		else if (strcmp(BotC,"2") == 0) {
+			MaxBots = 4;
+		}
+		else if (strcmp(BotC,"3") == 0) {
+			MaxBots = 6;
+		}
+		else if (strcmp(BotC,"4") == 0) {
+			MaxBots = 8;
+		}
+		else if (strcmp(BotC,"5") == 0) {
+			MaxBots = 10;
+		}
+		else if (strcmp(BotC,"6") == 0) {
+			MaxBots = 12;
+		}
+		else if (strcmp(BotC,"7") == 0) {
+			MaxBots = 14;
+		}
+		else if (strcmp(BotC,"8") == 0) {
+			MaxBots = 16;
+		}
+		else if (strcmp(BotC,"9") == 0) {
+			MaxBots = 18;
+		}
+		else if (strcmp(BotC,"10") == 0) {
+			MaxBots = 20;
+		}
+		else if (strcmp(BotC,"11") == 0) {
+			MaxBots = 22;
+		}
+		else if (strcmp(BotC,"12") == 0) {
+			MaxBots = 24;
+		}
+		else if (strcmp(BotC,"13") == 0) {
+			MaxBots = 26;
+		}
+		else if (strcmp(BotC,"14") == 0) {
+			MaxBots = 28;
+		}
+		else if (strcmp(BotC,"15") == 0) {
+			MaxBots = 30;
+		}
+		else if (strcmp(BotC,"16") == 0) {
+			MaxBots = 32;
+		}
+		delete BotC;
+	}
+	
+	CustomNames = false;
+	char* CuNa = GetConfig("data/MatchSettings.txt","CustomNames");
+	if (CuNa != NULL) {
+		if (strcmp(CuNa,"true") == 0) {
+			CustomNames = true;
+		}
+		else if (strcmp(CuNa,"false") == 0) {
+			CustomNames = false;
+		}
+		delete CuNa;
+	}
+	
+	AllowRegeneration = false;
+	char* AllReg = GetConfig("data/MatchSettings.txt","AllowRegeneration");
+	if (AllReg != NULL) {
+		if (strcmp(AllReg,"true") == 0) {
+			AllowRegeneration = true;
+		}
+		else if (strcmp(AllReg,"false") == 0) {
+			AllowRegeneration = false;
+		}
+		delete AllReg;
+	}
+	
+}
+
 
 void GameStateNewGame::Save()
 {
@@ -738,6 +921,8 @@ void GameStateNewGame::Render()
 					gFont->DrawShadowedString("ZM",170,65,JGETEXT_LEFT);
 				}
 				
+				gFont->SetScale(0.60f);
+				gFont->DrawShadowedString("[SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 				gFont->SetScale(0.75f);
 				gFont->DrawShadowedString("[X] Start Game     [O] Return to Menu     [<] [>] Change",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 			}
@@ -817,8 +1002,9 @@ void GameStateNewGame::Render()
 				}
 				
 				gFont->SetColor(ARGB(255,255,255,255));
+				gFont->SetScale(0.60f);
+				gFont->DrawShadowedString("[[]] Max     [^] Min     [SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 				gFont->SetScale(0.75f);
-				gFont->DrawShadowedString("[[]] Max     [^] Min ",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-35,JGETEXT_CENTER);
 				gFont->DrawShadowedString("[X] Start Game     [O] Return to Menu     [<] [>] Change",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 			}
 			else {
@@ -934,57 +1120,58 @@ void GameStateNewGame::Render()
 					gFont->DrawShadowedString("0",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 1) {
-					gFont->DrawShadowedString("1",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("1 vs 1 (2)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 2) {
-					gFont->DrawShadowedString("3",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("2 vs 2 (4)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 3) {
-					gFont->DrawShadowedString("5",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("3 vs 3 (6)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 4) {
-					gFont->DrawShadowedString("7",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("4 vs 4 (8)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 5) {
-					gFont->DrawShadowedString("9",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("5 vs 5 (10)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 6) {
-					gFont->DrawShadowedString("11",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("6 vs 6 (12)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 7) {
-					gFont->DrawShadowedString("13",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("7 vs 7 (14)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 8) {
-					gFont->DrawShadowedString("15",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("8 vs 8 (16)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 9) {
-					gFont->DrawShadowedString("17",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("9 vs 9 (18)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 10) {
-					gFont->DrawShadowedString("19",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("10 vs 10 (20)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 11) {
-					gFont->DrawShadowedString("21",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("11 vs 11 (22)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 12) {
-					gFont->DrawShadowedString("23",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("12 vs 12 (24)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 13) {
-					gFont->DrawShadowedString("25",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("13 vs 13 (26)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 14) {
-					gFont->DrawShadowedString("27",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("14 vs 14 (28)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 15) {
-					gFont->DrawShadowedString("29",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("15 vs 15 (30)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 16) {
-					gFont->DrawShadowedString("31",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("16 vs 16 (32)",170,65,JGETEXT_LEFT);
 				}
 				
 				gFont->SetColor(ARGB(255,255,255,255));
+				gFont->SetScale(0.60f);
+				gFont->DrawShadowedString("[[]] Max     [^] Min     [SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 				gFont->SetScale(0.75f);
-				gFont->DrawShadowedString("[[]] Max     [^] Min ",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-35,JGETEXT_CENTER);
 				gFont->DrawShadowedString("[X] Start Game     [O] Return to Menu     [<] [>] Change",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 			}
 			else {
@@ -999,52 +1186,52 @@ void GameStateNewGame::Render()
 					gFont->DrawShadowedString("0",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 1) {
-					gFont->DrawShadowedString("1",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("1 vs 1 (2)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 2) {
-					gFont->DrawShadowedString("3",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("2 vs 2 (4)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 3) {
-					gFont->DrawShadowedString("5",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("3 vs 3 (6)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 4) {
-					gFont->DrawShadowedString("7",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("4 vs 4 (8)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 5) {
-					gFont->DrawShadowedString("9",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("5 vs 5 (10)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 6) {
-					gFont->DrawShadowedString("11",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("6 vs 6 (12)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 7) {
-					gFont->DrawShadowedString("13",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("7 vs 7 (14)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 8) {
-					gFont->DrawShadowedString("15",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("8 vs 8 (16)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 9) {
-					gFont->DrawShadowedString("17",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("9 vs 9 (18)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 10) {
-					gFont->DrawShadowedString("19",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("10 vs 10 (20)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 11) {
-					gFont->DrawShadowedString("21",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("11 vs 11 (22)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 12) {
-					gFont->DrawShadowedString("23",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("12 vs 12 (24)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 13) {
-					gFont->DrawShadowedString("25",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("13 vs 13 (26)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 14) {
-					gFont->DrawShadowedString("27",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("14 vs 14 (28)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 15) {
-					gFont->DrawShadowedString("29",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("15 vs 15 (30)",170,65,JGETEXT_LEFT);
 				}
 				if (MaxBots == 16) {
-					gFont->DrawShadowedString("31",170,65,JGETEXT_LEFT);
+					gFont->DrawShadowedString("16 vs 16 (32)",170,65,JGETEXT_LEFT);
 				}
 			}
 			
@@ -1059,13 +1246,15 @@ void GameStateNewGame::Render()
 				gFont->DrawShadowedString("Custom Nick",150,90,JGETEXT_RIGHT);
 				gFont->SetColor(ARGB(255,255,255,255));
 				if (CustomNames == true) {
-					gFont->DrawShadowedString("Enabled",170,90,JGETEXT_LEFT);
+					gFont->DrawShadowedString("Enabled (Not Working)",170,90,JGETEXT_LEFT);
 				}
 				if (CustomNames == false) {
 					gFont->DrawShadowedString("Disabled",170,90,JGETEXT_LEFT);
 				}
 				
 				gFont->SetColor(ARGB(255,255,255,255));
+				gFont->SetScale(0.60f);
+				gFont->DrawShadowedString("[SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 				gFont->SetScale(0.75f);
 				gFont->DrawShadowedString("[X] Select & Play     [O] Return to Menu     [<] [>] Change",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 			}
@@ -1075,7 +1264,7 @@ void GameStateNewGame::Render()
 				gFont->DrawShadowedString("Custom Nick",150,90,JGETEXT_RIGHT);
 				gFont->SetColor(ARGB(255,255,255,255));
 				if (CustomNames == true) {
-					gFont->DrawShadowedString("Enabled",170,90,JGETEXT_LEFT);
+					gFont->DrawShadowedString("Enabled (Not Working)",170,90,JGETEXT_LEFT);
 				}
 				if (CustomNames == false) {
 					gFont->DrawShadowedString("Disabled",170,90,JGETEXT_LEFT);
@@ -1119,6 +1308,7 @@ void GameStateNewGame::Render()
 			if (NGmRules = NGAllowRegen) {
 				gFont->SetColor(ARGB(255,255,244,53));
 				mRenderer->FillRect(0,85,SCREEN_WIDTH,25,ARGB(175,0,0,0));
+				mRenderer->FillRect(0,60,SCREEN_WIDTH,25,ARGB(175,0,0,0));
 				gFont->SetScale(1.0f);
 				gFont->DrawShadowedString("Regeneration",150,65,JGETEXT_RIGHT);
 				gFont->SetColor(ARGB(255,255,255,255));
@@ -1130,14 +1320,17 @@ void GameStateNewGame::Render()
 				}
 				
 				gFont->SetColor(ARGB(255,255,255,255));
+				gFont->SetScale(0.60f);
+				gFont->DrawShadowedString("[SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 				gFont->SetScale(0.75f);
 				gFont->DrawShadowedString("[X] Select & Play     [O] Return to Menu     [<] [>] Switch",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 			}
 			else {
-				gFont->SetColor(ARGB(255,255,255,255));
+				mRenderer->FillRect(0,60,SCREEN_WIDTH,25,ARGB(175,0,0,0)); // That Line
+				gFont->SetColor(ARGB(255,255,244,53)); // Yellow Text
 				gFont->SetScale(1.0f);
 				gFont->DrawShadowedString("Regeneration",150,65,JGETEXT_RIGHT);
-				gFont->SetColor(ARGB(255,255,255,255));
+				gFont->SetColor(ARGB(255,255,255,255)); // White Text
 				if (AllowRegeneration == true) {
 					gFont->DrawShadowedString("Enabled",170,65,JGETEXT_LEFT);
 				}
@@ -1151,8 +1344,10 @@ void GameStateNewGame::Render()
 			
 
 			gFont->SetColor(ARGB(255,255,255,255));
+			gFont->SetScale(0.60f);
+			gFont->DrawShadowedString("[SELECT] Make Default     [START] Make Default All",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-32,JGETEXT_CENTER);
 			gFont->SetScale(0.75f);
-			gFont->DrawShadowedString("[X] Select & Play     [O] Return to Menu     [<] [>] Move",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
+			gFont->DrawShadowedString("[X] Select & Play     [O] Return to Menu     [<] [>] Switch",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 		}
 		
 		// White Line to cross name and name's param.

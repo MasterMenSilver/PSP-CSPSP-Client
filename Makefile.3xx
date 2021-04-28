@@ -23,7 +23,7 @@ LIBS=-L../../JGE/lib/psp -lhgetools -ljge300 -lfreetype -ljpeg -lgif -lpng -lz -
 #LIBS = -lhgetools -ljge300 -lfreetype -ljpeg -lgif -lpng -lz -lm -lmad -lmikmod -lmmio -lpsppower -lpspmpeg -lpspaudiocodec -lpspaudiolib -lpspaudio -lpspgum -lpspgu -lpsprtc -lstdc++ -lpspwlan -lpspopenpsid
 
 EXTRA_TARGETS = EBOOT.PBP
-PSP_EBOOT_TITLE = CSPSP 1.93
+PSP_EBOOT_TITLE = CSPSP 1.94
 PSP_EBOOT_ICON = icon.png
 PSP_EBOOT_PIC1 = bg.png
 
