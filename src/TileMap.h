@@ -54,6 +54,18 @@ struct BombZone {
 	float y2;
 };
 
+struct Teleport {
+	// Start Teleport Points
+	float x0;
+	float y0;
+	float x1;
+	float y1;
+	
+	// Final Teleport Coordinates
+	float x2;
+	float y2;
+};
+
 //------------------------------------------------------------------------------------------------
 class TileMap
 {
@@ -85,6 +97,7 @@ public:
 	std::vector<BuyZone> mCTBuyZones;
 	std::vector<BuyZone> mTBuyZones;
 	std::vector<BombZone> mBombZones;
+	std::vector<Teleport> mTeleportZones;
 	std::vector<Node*> mNodes;
 	int mNumPoints;
 	int mNumCTs;

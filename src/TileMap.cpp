@@ -391,6 +391,38 @@ bool TileMap::Load(char *mapFile, Gun guns[], int gameType)
 						} 
 					}
 				}
+				
+				// Teleport Zones
+				else if (strcmp(section,"teleport") == 0) {
+					while (strncmp(fgets(line,4096,file),"}",1) != 0) {
+						s = line;
+						while (s) {
+							Teleport teleport = Teleport();
+							int x0, y0, x1, y1, x2, y2;
+							sscanf(s,"(%d, %d,%d, %d,%d, %d,%d)", &index, &x0, &y0, &x1, &y1, &x2, &y2);
+							teleport.x0 = x0;
+							teleport.y0 = y0;
+							teleport.x1 = x1;
+							teleport.y1 = y1;
+							
+							teleport.x2 = x2;
+							teleport.y2 = y2;
+							if (index == 0) {
+							}
+							else if (index == 1) {
+								mTeleportZones.push_back(teleport);
+							}
+							
+							s = strchr(s,';'); 
+							if (s != NULL) {
+								s += 1;
+							}
+						} 
+					}
+				}
+				
+				
+				
 				else if (strcmp(section,"bombzones") == 0) {
 					while (strncmp(fgets(line,4096,file),"}",1) != 0) {
 						s = line;

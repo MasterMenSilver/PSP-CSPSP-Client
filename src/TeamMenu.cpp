@@ -52,6 +52,8 @@ TeamMenu::TeamMenu()
 	FormatText(mTeamLines,"Eliminate the other team. The first team to kill all of the other players on the other team wins.",150,0.6f);
 	FormatText(mCTFLines,"Capture the enemy flag while defending your own. The team with the most captures by the end of the round wins.",150,0.6f);
 	FormatText(mFFALines,"Eliminate everyone else. The player with the most kills by the end of the round wins.\n\nTeam selection only matters for your appearance and weapons.",150,0.6f);
+	FormatText(mZMLines, "Survive the last times of the zombie appocalypse! Kill every zombie and don't get eaten", 150, 0.6f);
+	// mZMLines
 }
 
 //------------------------------------------------------------------------------------------------
@@ -179,6 +181,14 @@ void TeamMenu::Render()
 			gFont->SetScale(0.6f);
 			for (int i=0; i<mCTFLines.size(); i++) {
 				gFont->DrawString(mCTFLines[i],315,160+10*i);
+			}
+		}
+		else if (*mGameType == ZM) {
+			gFont->SetScale(0.75f);
+			gFont->DrawString("Zombie Survive",310,140);
+			gFont->SetScale(0.6f);
+			for (int i=0; i<mZMLines.size(); i++) {
+				gFont->DrawString(mZMLines[i],315,160+10*i);
 			}
 		}
 	}
