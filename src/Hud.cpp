@@ -209,8 +209,8 @@ void Hud::Render()
 			}
 			else {
 				if (mMessageEvents[i].chatevent.isTeamOnly) {
-					gFont->DrawShadowedString("(team) ",x,y);
-					x += gFont->GetStringWidth("(team) ");
+					gFont->DrawShadowedString("(Team) ",x,y);
+					x += gFont->GetStringWidth("(Team) ");
 				}
 				if (mMessageEvents[i].chatevent.isDead) {
 					gFont->DrawShadowedString("*DEAD* ",x,y);

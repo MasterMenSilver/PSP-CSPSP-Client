@@ -36,8 +36,8 @@ void GameStateOnline::Create()
 	mGuiController = new JGuiController(150, this);
 	mGuiController->SetActive(false);
 	if (mGuiController) {	
-		mGuiController->Add(new MenuItem(1, gFont, "resume", SCREEN_WIDTH_2, 100, TYPE_MAIN, JGETEXT_CENTER, true));
-		mGuiController->Add(new MenuItem(2, gFont, "change teams", SCREEN_WIDTH_2, 125, TYPE_MAIN, JGETEXT_CENTER));
+		mGuiController->Add(new MenuItem(1, gFont, "Resume", SCREEN_WIDTH_2, 100, TYPE_MAIN, JGETEXT_CENTER, true));
+		mGuiController->Add(new MenuItem(2, gFont, "Change Teams", SCREEN_WIDTH_2, 125, TYPE_MAIN, JGETEXT_CENTER));
 	}
 
 	mUpdateTimer = 0.0f;
@@ -1340,9 +1340,9 @@ void GameStateOnline::HandlePacket(Packet &packet, bool sendack) {
 				mGuiController->Remove(3);
 				mGuiController->Remove(4);
 				if (mIsAdmin) {
-					mGuiController->Add(new MenuItem(3, gFont, "admin menu", SCREEN_WIDTH_2, 150, TYPE_MAIN, JGETEXT_CENTER));
+					mGuiController->Add(new MenuItem(3, gFont, "Admin Menu", SCREEN_WIDTH_2, 150, TYPE_MAIN, JGETEXT_CENTER));
 				}
-				mGuiController->Add(new MenuItem(4, gFont, "leave game", SCREEN_WIDTH_2, 175, TYPE_MAIN, JGETEXT_CENTER));
+				mGuiController->Add(new MenuItem(4, gFont, "Leave Game", SCREEN_WIDTH_2, 175, TYPE_MAIN, JGETEXT_CENTER));
 			
 				mMapTextSize = maptextsize;
 				mMapImageSize = mapimagesize;

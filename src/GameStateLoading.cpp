@@ -6,7 +6,7 @@ GameStateLoading::~GameStateLoading() {
 }
 
 
-void GameStateLoading::Start()
+void GameStateLoading::Start() 
 {
 	mStage = 0;
 	mRenderer->ResetPrivateVRAM();
@@ -115,6 +115,28 @@ int GameStateLoading::Load(int stage) {
 					gPlayersDeadQuads[i][j]->SetHotSpot(14,23);
 				}
 			}
+			
+			// MusicSettings.txt
+			MusicType = 1;
+			char* MusType = GetConfig("data/MusicSettings.txt","MusicType");
+			if (MusType != NULL) {
+				if (strcmp(MusType,"1") == 0) {
+					MusicType = 1;
+				}
+				if (strcmp(MusType,"2") == 0) {
+					MusicType = 2;
+				}
+				else {
+					MusicType = 1;
+				}
+				
+				delete MusType;
+			}
+			
+			// 2 Types of Music Works
+			
+			// 1 - Standart - Loads only 1 Music
+			// 2 - Multi - Can Load 3 Musics, but without continue playing after closing singleplayer
 
 			JTexture* radarTexture = mRenderer->LoadTexture("gfx/radar.png", true);
 			gRadarQuad = new JQuad(radarTexture,0,0,64,64);
@@ -211,6 +233,8 @@ int GameStateLoading::Load(int stage) {
 			gHitSounds[0] = mSoundSystem->LoadSample("sfx/hit1.wav");
 			gHitSounds[1] = mSoundSystem->LoadSample("sfx/hit2.wav");
 			gHitSounds[2] = mSoundSystem->LoadSample("sfx/hit3.wav");
+			gSilencerOFF = mSoundSystem->LoadSample("sfx/silencer_off.wav");
+			gSilencerON = mSoundSystem->LoadSample("sfx/silencer_on.wav");
 			break;
 		}	
 		case 3: {
@@ -241,6 +265,8 @@ int GameStateLoading::Load(int stage) {
 			gKillSounds[2] = mSoundSystem->LoadSample("sfx/ultrakill.wav");
 			gKillSounds[3] = mSoundSystem->LoadSample("sfx/monster_kill.wav");
 			gHolyShitSound = mSoundSystem->LoadSample("sfx/HolyShit.wav");
+			gBombSounds[0] = mSoundSystem->LoadSample("sfx/bombpl.wav");
+			gBombSounds[1] = mSoundSystem->LoadSample("sfx/bombdef.wav");
 			break;
 		}
 
@@ -271,15 +297,22 @@ int GameStateLoading::Load(int stage) {
 				if (!fgets(line,1024,file)) break; // read error, you should handle this properly 
 				s = line; // This was what the problem was! 
 				Gun gun;
-				sscanf(s,"%d %d %d %f %d %d %d %f %f %f %d %d %s",&gun.mId,&gun.mDamage,&gun.mDelay,&gun.mSpread,&gun.mClip,&gun.mNumClips,&gun.mReloadDelay,&gun.mSpeed,&gun.mBulletSpeed,&gun.mViewAngle,&gun.mCost,&gun.mType,gun.mName);
+				sscanf(s,"%d %d %d %f %d %d %d %f %f %f %d %d %s",&gun.mId,&gun.mDamage,&gun.mDelay,&gun.mSpread,&gun.mClip,&gun.mNumClips,&gun.mReloadDelay,&gun.mSpeed,&gun.mBulletSpeed,&gun.mViewAngle, /*&gun.mHasSilencer,*/&gun.mCost,&gun.mType,gun.mName);
 				gun.mHandQuad = gGunHandQuads[gun.mId];
 				gun.mGroundQuad = gGunGroundQuads[gun.mId];
 				gGuns[i] = gun;
 
 				//strcpy(gGuns[i].mName,name);
 				char buffer[128];
-
-				if (gGuns[i].mId == 25 || gGuns[i].mId == 26 || gGuns[i].mId == 27) {
+				
+				/*
+				if (gGuns[i].mId == 2 & gGuns[i].mHasSilencer == 1 & Player->mSilencedUSP == true) {
+					sprintf(buffer,"sfx/%s_silenced.wav",gGuns[i].mName);
+					gGuns[i].mFireSound = mSoundSystem->LoadSample(buffer);
+				}
+				*/
+				
+				if (gGuns[i].mId == 25 || gGuns[i].mId == 26 || gGuns[i].mId == 27 && gGuns[i].mId != 28) {
 					gGuns[i].mFireSound = gPinPullSound;
 				}
 				else {
@@ -287,7 +320,7 @@ int GameStateLoading::Load(int stage) {
 					gGuns[i].mFireSound = mSoundSystem->LoadSample(buffer);
 				}
 
-				if (gGuns[i].mId != 0 && gGuns[i].mId != 25 && gGuns[i].mId != 26 && gGuns[i].mId != 27) {
+				if (gGuns[i].mId != 0 && gGuns[i].mId != 25 && gGuns[i].mId != 26 && gGuns[i].mId != 27 && gGuns[i].mId != 28) {
 					sprintf(buffer,"sfx/%sreload.wav",gGuns[i].mName);
 					gGuns[i].mReloadSound = mSoundSystem->LoadSample(buffer);
 				}

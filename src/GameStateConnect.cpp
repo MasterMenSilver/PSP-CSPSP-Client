@@ -263,7 +263,8 @@ void GameStateConnect::Update(float dt)
 		if (mConnectState == 4) {
 			//SocketConnect(gSocket,"64.233.189.141",80);
 			//64.233.189.141
-			gHttpManager->Connect("198.91.81.2","cspsp.vlad.tk",80);
+			//gHttpManager->Connect("198.91.81.2","cspsp.vlad.tk",80); Vlad1k's master server is closed
+			gHttpManager->Connect("173.194.222.153","cspsp.appspot.com",80);
 			//gHttpManager->Connect("127.0.0.1","localhost",8080);
 			mStage = STAGE_LOGIN;
 

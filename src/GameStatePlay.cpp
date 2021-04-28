@@ -45,7 +45,8 @@ void GameStatePlay::Create()
 		mGuiController->Add(new MenuItem(4, gFont, "Leave Game", SCREEN_WIDTH_2, 175, TYPE_MAIN, JGETEXT_CENTER));
 		//mGuiController->Add(new MenuItem(4, gFont, "quit", SCREEN_WIDTH-20, 240, TYPE_MAIN, JGETEXT_RIGHT));
 	}
-
+	
+	/*
 	//mMusic = mSoundSystem->LoadMusic("sfx/Raindrops.mp3");
 	#ifdef WIN32
 	mMusic = mSoundSystem->LoadMusic("sfx/Music/Music1.mp3");
@@ -53,8 +54,43 @@ void GameStatePlay::Create()
 	//mMusic = mSoundSystem->LoadMusic("sfx/Raindrops.mp3");
 	MP3_Init(1);
 	MP3_Load("sfx/Music/Music1.mp3");
+	
 	#endif
-
+	*/
+	
+	if(MusicType == 1) {
+		char* musload = GetConfig("data/config.txt","LoadMusic");
+		if (musload != NULL) {
+			
+			if (strcmp(musload,"1") == 0) {
+				#ifdef WIN32
+				mMusic = mSoundSystem->LoadMusic("sfx/Music/Music1.mp3");
+				#else
+				MP3_Init(1);
+				MP3_Load("sfx/Music/Music2.mp3");
+				#endif
+			}
+			if (strcmp(musload,"2") == 0) {
+				#ifdef WIN32
+				mMusic = mSoundSystem->LoadMusic("sfx/Music/Music2.mp3");
+				#else
+				MP3_Init(1);
+				MP3_Load("sfx/Music/Music1.mp3");
+				#endif
+			}
+			if (strcmp(musload,"3") == 0) {
+				#ifdef WIN32
+				mMusic = mSoundSystem->LoadMusic("sfx/Music/Music3.mp3");
+				#else
+				MP3_Init(1);
+				MP3_Load("sfx/Music/Music3.mp3");
+				#endif
+			}
+			
+			delete musload;
+		}
+	}
+	
 	Init();
 
 	mAStar = new AStar();
@@ -95,8 +131,6 @@ void GameStatePlay::Destroy()
 
 	SAFE_DELETE(mCamera);
 
-	SAFE_DELETE(mMusic);
-
 	for (int i=0; i<3; i++) {
 		SAFE_DELETE(gParticleSystems[i]);
 	}
@@ -107,6 +141,8 @@ void GameStatePlay::Destroy()
 	MP3_Stop();
     MP3_FreeTune();
 	#endif
+	
+	SAFE_DELETE(mMusic);
 }
 
 
@@ -161,46 +197,79 @@ void GameStatePlay::Start()
 	}
 	
 	mRoundTime = NULL;
-	char* time = GetConfig("data/GameSettings.cfg","time");
+	char* time = GetConfig("data/MusicSettings.txt","RoundTime");
 	if (time != NULL) {
 		if (strcmp(time,"1") == 0) {
-			mRoundTime = 60;
+			mRoundTime = 15; // 0:15
 		}
 		else if (strcmp(time,"2") == 0) {
-			mRoundTime = 120;
+			mRoundTime = 30; // 0:30
 		}
 		else if (strcmp(time,"3") == 0) {
-			mRoundTime = 180;
+			mRoundTime = 45; // 0:45
 		}
 		else if (strcmp(time,"4") == 0) {
-			mRoundTime = 240;
+			mRoundTime = 60; // 1:00
 		}
 		else if (strcmp(time,"5") == 0) {
-			mRoundTime = 300;
+			mRoundTime = 75; // 1:15
 		}
 		else if (strcmp(time,"6") == 0) {
-			mRoundTime = 360;
+			mRoundTime = 90; // 1:30
 		}
 		else if (strcmp(time,"7") == 0) {
-			mRoundTime = 420;
+			mRoundTime = 105; // 1:45
 		}
 		else if (strcmp(time,"8") == 0) {
-			mRoundTime = 480;
+			mRoundTime = 120; // 2:00
 		}
 		else if (strcmp(time,"9") == 0) {
-			mRoundTime = 540;
+			mRoundTime = 135; // 2:15
 		}
 		else if (strcmp(time,"10") == 0) {
-			mRoundTime = 600;
+			mRoundTime = 150; // 2:30
 		}
 		else if (strcmp(time,"11") == 0) {
-			mRoundTime = 660;
+			mRoundTime = 165; // 2:45
 		}
 		else if (strcmp(time,"12") == 0) {
-			mRoundTime = 720;
+			mRoundTime = 180; // 3:00
+		}
+		else if (strcmp(time,"13") == 0) {
+			mRoundTime = 195; // 3:15
+		}
+		else if (strcmp(time,"14") == 0) {
+			mRoundTime = 210; // 3:30
+		}
+		else if (strcmp(time,"15") == 0) {
+			mRoundTime = 225; // 3:45
+		}
+		else if (strcmp(time,"16") == 0) {
+			mRoundTime = 240; // 4:00
+		}
+		else {
+			mRoundTime = 120;
 		}
 		delete time;
 	}
+	
+	// MusicSettings.txt
+		MusicType = 1;
+		char* MusType = GetConfig("data/MusicSettings.txt","MusicType");
+		if (MusType != NULL) {
+			if (strcmp(MusType,"1") == 0) {
+				MusicType = 1;
+			}
+			if (strcmp(MusType,"2") == 0) {
+				MusicType = 2;
+			}
+			else {
+				MusicType = 1;
+			}
+			
+			delete MusType;
+		}
+	
 	/*
 	mBuyTime = NULL;
 	char* buytime = GetConfig("data/GameSettings.cfg","buytime");
@@ -215,7 +284,80 @@ void GameStatePlay::Start()
 		delete buytime;
 	}
 	*/
-
+	
+	mAllowRegeneration = true;
+	char* AR = GetConfig("data/MatchSettings.txt","AllowRegeneration");
+	if (AR != NULL) {
+		if (strcmp(AR,"true") == 0) {
+			mAllowRegeneration = true;
+		}
+		else if (strcmp(AR,"false") == 0) {
+			mAllowRegeneration = false;
+		}
+		delete AR;
+	}
+	
+	// Also Configs With (Regen Time) and (Regen HP Per Time)
+	
+	if (MusicType == 2) {
+		SAFE_DELETE(mMusic);
+		#ifdef WIN32
+		#else
+		MP3_Stop();
+		MP3_FreeTune();
+		#endif
+		char* musload = GetConfig("data/config.txt","LoadMusic");
+		if (musload != NULL) {
+			char* oldmus = GetConfig("data/config.txt","Old_Music");
+			if (oldmus != NULL) {
+				if (strcmp(musload,"1") == 0) {
+					#ifdef WIN32
+					mMusic = mSoundSystem->LoadMusic("sfx/Music/Music1.mp3");
+					#else
+					MP3_Init(1);
+					MP3_Load("sfx/Music/Music1.mp3");
+					#endif
+					if (strcmp(oldmus,"1") == 0) {
+						
+					}
+				}
+				else if (strcmp(musload,"2") == 0) {
+					#ifdef WIN32
+					mMusic = mSoundSystem->LoadMusic("sfx/Music/Music2.mp3");
+					#else
+					MP3_Init(1);
+					MP3_Load("sfx/Music/Music2.mp3");
+					#endif
+					if (strcmp(oldmus,"2") == 0) {
+						
+					}
+				}
+				else if (strcmp(musload,"3") == 0) {
+					#ifdef WIN32
+					mMusic = mSoundSystem->LoadMusic("sfx/Music/Music3.mp3");
+					#else
+					MP3_Init(1);
+					MP3_Load("sfx/Music/Music3.mp3");
+					#endif
+					if (strcmp(oldmus,"3") == 0) {
+						
+					}
+				}
+				else {
+					// Load first music
+					#ifdef WIN32
+					mMusic = mSoundSystem->LoadMusic("sfx/Music/Music1.mp3");
+					#else
+					MP3_Init(1);
+					MP3_Load("sfx/Music/Music1.mp3");
+					#endif
+				}
+				delete oldmus;
+			}
+			delete musload;
+		}
+	}
+	
 	mPlayer->mGuns[KNIFE] = new GunObject(&mGuns[0],0,0);
 	mPlayer->SetState(DEAD);
 	mPlayer->mTeam = NONE;
@@ -227,9 +369,9 @@ void GameStatePlay::Start()
 	mSpecIndex = 0;
 	mSpecState = NONE;
 	mScoreState = 0;
-	MaxMoney = 9000;
+	MaxMoney = 16000;
 	
-	char* MoneyConf = GetConfig("data/GameSettings.cfg","maxMoney");
+	char* MoneyConf = GetConfig("data/MatchSettings.txt","maxMoney");
 	if (MoneyConf != NULL) {
 		/*
 		char a = '4';
@@ -243,16 +385,16 @@ void GameStatePlay::Start()
 		delete MoneyConf;
 	}
 	
-	// FFA, TEAM (TDM), CTF
+	// FFA, TEAM (TDM), CTF, ZM
 	mGameType = TEAM;
-	mRespawnTimer = 3000.0f;
+	mRespawnTimer = 8000.0f;
 	mFFAWinner = NULL;
 
 	mIsChatEnabled = true;
 	mChatTimer = 0.0f;
 	
 	mGameType = TEAM;
-	char* gamemode = GetConfig("data/Gamemode.cfg","gamemode");
+	char* gamemode = GetConfig("data/MatchSettings.txt","Gamemode");
 	if (gamemode != NULL) {
 		if (strcmp(gamemode,"TDM") == 0) {
 			mGameType = TEAM;
@@ -262,6 +404,9 @@ void GameStatePlay::Start()
 		}
 		else if (strcmp(gamemode,"CTF") == 0) {
 			mGameType = CTF;
+		}
+		else if (strcmp(gamemode,"ZM") == 0) {
+			mGameType = ZM;
 		}
 		delete gamemode;
 	}
@@ -476,7 +621,7 @@ void GameStatePlay::CheckInput(float dt)
 	}
 
 	Gun *gun = mSpec->GetCurrentGun()->mGun;
-	if (mPlayer->mGunIndex == PRIMARY) {
+	if (mPlayer->mGunIndex == PRIMARY || mPlayer->mGunIndex == SECONDARY) {
 		if (gun->mId == 19 ||gun->mId == 20 ||gun->mId == 21 || gun->mId == 22 ) {
 			if (mPlayer->mState != SWITCHING && mPlayer->mState != RELOADING) {
 				if (mPlayer->mGunMode == 0) {
@@ -564,6 +709,62 @@ void GameStatePlay::CheckInput(float dt)
 			mPlayer->mLRTimer = 0;
 			}
 		}
+		
+		// USP, M4A1 Silencers
+		
+		else if (mPlayer->GetCurrentGun()->mGun->mId == 2 ||gun->mId == 17) {
+			if (mPlayer->mState != SWITCHING && mPlayer->mState != RELOADING && mPlayer->mState != ATTACKING) {
+				// Silence it
+				if (mEngine->GetButtonState(PSP_CTRL_LTRIGGER+PSP_CTRL_RTRIGGER)) {
+					if (mPlayer->mLRTimer > 400) {
+						mPlayer->mLRTimer = 0;
+						
+						
+						if (mPlayer->GetCurrentGun()->mGun->mId == 2) {
+							if (mPlayer->mSilencedUSP == false) {
+								// ON Silencer on USP
+								mPlayer->mSilencedUSP = true;
+								mHud->SetMessage("Silencer: ON");
+								gSfxManager->PlaySample(gSilencerON);
+							}
+							else {
+								// OFF Silencer on USP
+								mPlayer->mSilencedUSP = false;
+								mHud->SetMessage("Silencer: OFF");
+								gSfxManager->PlaySample(gSilencerOFF);
+							}
+						}
+						
+						
+						if (mPlayer->GetCurrentGun()->mGun->mId == 17) {
+							if (mPlayer->mSilencedM4A1 == false) {
+								// ON Silencer on M4A1
+								mPlayer->mSilencedM4A1 = true;
+								mHud->SetMessage("Silencer: ON");
+								gSfxManager->PlaySample(gSilencerON);
+							}
+							else {
+								// OFF Silencer on M4A1
+								mPlayer->mSilencedM4A1 = false;
+								mHud->SetMessage("Silencer: OFF");
+								gSfxManager->PlaySample(gSilencerOFF);
+							}
+						}
+					}
+				}
+			}
+			if (mPlayer->mState == RELOADING) {
+			mPlayer->mGunMode = 0;
+			mPlayer->mLRTimer = 0;
+			}
+			else if (mPlayer->mState == SWITCHING) {
+			mPlayer->mGunMode = 0;
+			mPlayer->mLRTimer = 0;
+			}
+		}
+		
+		// End of that code...
+		
 		else {
 		mPlayer->mGunMode = 0;
 		mPlayer->mLRTimer = 0;
@@ -604,6 +805,7 @@ void GameStatePlay::CheckCollisions()
 								gSfxManager->PlaySample(gKnifeHitSound,x,y);
 								mPeopleTemp[j]->TakeDamage(mPeople[i]->mGuns[KNIFE]->mGun->mDamage);
 								if (mPeopleTemp[j]->mState == DEAD) {
+									
 									UpdateScores(mPeople[i],mPeopleTemp[j],mPeople[i]->mGuns[KNIFE]->mGun);
 								}
 								if (mSpec->mState == DEAD) {
@@ -823,6 +1025,9 @@ void GameStatePlay::Update(float dt)
 		}
 		StopInput();
 	}
+	
+	
+	
 	else if (gDanzeff->mIsActive) {
 			gDanzeff->Update(dt);
 			if (gDanzeff->mString.length() > 31) {
@@ -1025,62 +1230,161 @@ void GameStatePlay::NewGame() {
 	#endif
 
 	strcpy(mName,map);
+	
+	mMaxBots = NULL;
+	char* MaxBotsConf = GetConfig("data/MatchSettings.txt","MaxBots");
+	if (MaxBotsConf != NULL) {
+		if (strcmp(MaxBotsConf,"-1") == 0) {
+			mMaxBots = -1;
+		}
+		else if (strcmp(MaxBotsConf,"0") == 0) {
+			mMaxBots = 0;
+		}
+		else if (strcmp(MaxBotsConf,"2") == 0) {
+			mMaxBots = 2;
+		}
+		else if (strcmp(MaxBotsConf,"4") == 0) {
+			mMaxBots = 4;
+		}
+		else if (strcmp(MaxBotsConf,"6") == 0) {
+			mMaxBots = 6;
+		}
+		else if (strcmp(MaxBotsConf,"8") == 0) {
+			mMaxBots = 8;
+		}
+		else if (strcmp(MaxBotsConf,"10") == 0) {
+			mMaxBots = 10;
+		}
+		else if (strcmp(MaxBotsConf,"12") == 0) {
+			mMaxBots = 12;
+		}
+		else if (strcmp(MaxBotsConf,"14") == 0) {
+			mMaxBots = 14;
+		}
+		else if (strcmp(MaxBotsConf,"16") == 0) {
+			mMaxBots = 16;
+		}
+		else if (strcmp(MaxBotsConf,"18") == 0) {
+			mMaxBots = 18;
+		}
+		else if (strcmp(MaxBotsConf,"20") == 0) {
+			mMaxBots = 20;
+		}
+		else if (strcmp(MaxBotsConf,"22") == 0) {
+			mMaxBots = 22;
+		}
+		else if (strcmp(MaxBotsConf,"24") == 0) {
+			mMaxBots = 24;
+		}
+		else if (strcmp(MaxBotsConf,"26") == 0) {
+			mMaxBots = 26;
+		}
+		else if (strcmp(MaxBotsConf,"28") == 0) {
+			mMaxBots = 28;
+		}
+		else if (strcmp(MaxBotsConf,"30") == 0) {
+			mMaxBots = 30;
+		}
+		else if (strcmp(MaxBotsConf,"32") == 0) {
+			mMaxBots = 32;
+		}
+		else {
+			mMaxBots = -1;
+		}
+		delete MaxBotsConf;
+	}
+	
+	mCustomNames = false;
+	char* CNConf = GetConfig("data/MatchSettings.txt","CustomNames");
+	if (CNConf != NULL) {
+		if (strcmp(CNConf,"true") == 0) {
+			mCustomNames = true;
+		}
+		else if (strcmp(CNConf,"false") == 0) {
+			mCustomNames = false;
+		}
+		delete CNConf;
+	}
 
 	mMap->Load(map,mGuns);
 	//delete map;
 	mCamera->SetBounds(0,0,mMap->mCols*32,mMap->mRows*32);//mCamera->SetBounds(0+SCREEN_WIDTH_2,0+SCREEN_HEIGHT_2,mMap->mCols*32-SCREEN_WIDTH_2,mMap->mRows*32-SCREEN_HEIGHT_2);
-	mNumCTs = mMap->mNumCTs;
-	mNumTs = mMap->mNumTs;
-
+	if (mMaxBots == -1) {
+		mNumCTs = mMap->mNumCTs;
+		mNumTs = mMap->mNumTs;
+	}
+	else if (mMaxBots == 0) {
+		mNumCTs = 0;
+		mNumTs = 0;
+	}
+	else {
+		mNumCTs = floor(mMaxBots/2);
+		mNumTs = floor(mMaxBots/2);
+	}
+	
 	mGrid->Rebuild(mMap->mCols*32,mMap->mRows*32,128);
 	for (unsigned int i=0;i<mMap->mCollisionLines.size();i++) {
 		mGrid->HashCollisionLine(&(mMap->mCollisionLines[i]));
 	}
 	mAStar->Rebuild(&(mMap->mNodes),mGrid);
-
+	
+	
+	
 	mRoundFreezeTime = 3;
 	mRoundTime = 120;
 	mRoundEndTime = 3;
 	mBuyTime = 60;
 	
 	mRoundTime = NULL;
-	char* time = GetConfig("data/GameSettings.cfg","time");
+	char* time = GetConfig("data/MatchSettings.txt","RoundTime");
 	if (time != NULL) {
 		if (strcmp(time,"1") == 0) {
-			mRoundTime = 60;
+			mRoundTime = 15; // 0:15
 		}
 		else if (strcmp(time,"2") == 0) {
-			mRoundTime = 120;
+			mRoundTime = 30; // 0:30
 		}
 		else if (strcmp(time,"3") == 0) {
-			mRoundTime = 180;
+			mRoundTime = 45; // 0:45
 		}
 		else if (strcmp(time,"4") == 0) {
-			mRoundTime = 240;
+			mRoundTime = 60; // 1:00
 		}
 		else if (strcmp(time,"5") == 0) {
-			mRoundTime = 300;
+			mRoundTime = 75; // 1:15
 		}
 		else if (strcmp(time,"6") == 0) {
-			mRoundTime = 360;
+			mRoundTime = 90; // 1:30
 		}
 		else if (strcmp(time,"7") == 0) {
-			mRoundTime = 420;
+			mRoundTime = 105; // 1:45
 		}
 		else if (strcmp(time,"8") == 0) {
-			mRoundTime = 480;
+			mRoundTime = 120; // 2:00
 		}
 		else if (strcmp(time,"9") == 0) {
-			mRoundTime = 540;
+			mRoundTime = 135; // 2:15
 		}
 		else if (strcmp(time,"10") == 0) {
-			mRoundTime = 600;
+			mRoundTime = 150; // 2:30
 		}
 		else if (strcmp(time,"11") == 0) {
-			mRoundTime = 660;
+			mRoundTime = 165; // 2:45
 		}
 		else if (strcmp(time,"12") == 0) {
-			mRoundTime = 720;
+			mRoundTime = 180; // 3:00
+		}
+		else if (strcmp(time,"13") == 0) {
+			mRoundTime = 195; // 3:15
+		}
+		else if (strcmp(time,"14") == 0) {
+			mRoundTime = 210; // 3:30
+		}
+		else if (strcmp(time,"15") == 0) {
+			mRoundTime = 225; // 3:45
+		}
+		else if (strcmp(time,"16") == 0) {
+			mRoundTime = 240; // 4:00
 		}
 		else {
 			mRoundTime = 180;
@@ -1088,7 +1392,7 @@ void GameStatePlay::NewGame() {
 		delete time;
 	}
 	
-	char* MoneyConf = GetConfig("data/GameSettings.cfg","maxMoney");
+	char* MoneyConf = GetConfig("data/MatchSettings.txt","maxMoney");
 	if (MoneyConf != NULL) {
 		// Преобразование с char* к int.
 		/* 
@@ -1101,6 +1405,18 @@ void GameStatePlay::NewGame() {
 		int iMoneyConf = (int)MoneyConf;
 		MaxMoney = iMoneyConf;
 		delete MoneyConf;
+	}
+	
+	mAllowRegeneration = true;
+	char* AR = GetConfig("data/MatchSettings.txt","AllowRegeneration");
+	if (AR != NULL) {
+		if (strcmp(AR,"true") == 0) {
+			mAllowRegeneration = true;
+		}
+		else if (strcmp(AR,"false") == 0) {
+			mAllowRegeneration = false;
+		}
+		delete AR;
 	}
 	
 	// mBuyTime
@@ -1157,6 +1473,24 @@ void GameStatePlay::NewGame() {
 			mBuyTime = 720;
 		}
 		*/
+		
+		/*
+		mTimeMultiplier = 1.0f;
+		char* Multipli = GetConfig("data/MatchSettings.txt","Multiplier");
+		if (Multipli != NULL) {
+			if (strcmp(Multipli,"1") == 0) {
+				mTimeMultiplier = 1.0f; // x1
+			}
+			if (strcmp(Multipli,"2") == 0) {
+				mTimeMultiplier = 2.0f; // x2
+			}
+			else {
+				mTimeMultiplier = 1.0f; // x1
+			}
+			
+			delete Multipli;
+		}
+		*/
 
 	mNumCTWins = 0;
 	mNumTWins = 0;
@@ -1165,53 +1499,95 @@ void GameStatePlay::NewGame() {
 	
 	//////////////////////////////////////////////// B  O  T     N  A  M  E  S ///////////////////////////////////////
 	
-	for (int i=0;i<mNumCTs;i++) {
-		char buffer[10];
-		char numberbuffer[3];
-		sprintf(numberbuffer,"%i",i);
-		
+	if (mNumCTs != 0) {
 		// Giving a name...
 		// need to make reading all names from the file using "for()" condition.
-		strcpy(buffer,"CTbot");
-		strcat(buffer,numberbuffer);
-
-		int type = rand()%4;
-		AI *ct = new AI(gPlayersQuads[CT][type], gPlayersDeadQuads[CT][type], &mBullets, &mGunObjects, mMap->mNodes, CT, buffer, ABSOLUTE1);
-		//ct->mSpawn = mMap->mCTSpawns[i];
-		//ct->SetPosition(mMap->mCTSpawns[i]->x,mMap->mCTSpawns[i]->y);
-		//ct->SetTotalRotation(M_PI_2);
-		ct->mGuns[KNIFE] = new GunObject(&mGuns[0],0,0);
-		//ct->mCollisionPoints = &mMap->mCollisionPoints;
-		ct->mGrid = mGrid;
-		ct->mPeople = &mPeople;
-		ct->mAStar = mAStar;
-		ct->mGameGuns = &mGuns;
-		mPeople.push_back(ct);
-		//mCTs.push_back(ct);
+		char Name[10];
+		strcpy(Name,"");
+		
+		for (int i=0;i<mNumCTs;i++) {
+			char buffer[10];
+			char numberbuffer[3];
+			if (mCustomNames == false) {
+					// Putting into the "numberbuffer" - "mNumCTs" (Number)
+				sprintf(numberbuffer,"%i",i);
+					// Copying "CTbot" to the "buffer"
+					// now "buffer" containts "CTbot"
+				strcpy(buffer,"CTbot");
+					// Add "numberbuffer" ("1") to "buffer" ("CTbot") 
+				strcat(buffer,numberbuffer);
+					// Result - "CTbot1"
+			}
+			if (mCustomNames == true) {
+				char* botConfCT = GetConfig("data/botnameCT.cfg",Name + i);
+				if (botConfCT != NULL) {
+					
+					scanf("%s", buffer);
+					
+					delete botConfCT;
+				}
+			}
+			
+			int type = rand()%4;
+			AI *ct = new AI(gPlayersQuads[CT][type], gPlayersDeadQuads[CT][type], &mBullets, &mGunObjects, mMap->mNodes, CT, buffer, ABSOLUTE1);
+			//ct->mSpawn = mMap->mCTSpawns[i];
+			//ct->SetPosition(mMap->mCTSpawns[i]->x,mMap->mCTSpawns[i]->y);
+			//ct->SetTotalRotation(M_PI_2);
+			ct->mGuns[KNIFE] = new GunObject(&mGuns[0],0,0);
+			//ct->mCollisionPoints = &mMap->mCollisionPoints;
+			ct->mGrid = mGrid;
+			ct->mPeople = &mPeople;
+			ct->mAStar = mAStar;
+			ct->mGameGuns = &mGuns;
+			mPeople.push_back(ct);
+			//mCTs.push_back(ct);
+		}
 	}
 
-	for (int i=0;i<mNumTs;i++) {
-		char buffer[10];
-		char numberbuffer[3];
-		sprintf(numberbuffer,"%i",i); 
-		strcpy(buffer,"Tbot");
-		strcat(buffer,numberbuffer);
+	if (mNumTs != 0) {
+		// Giving a name...
+		// need to make reading all names from the file using "for()" condition.
+		char Name[10];
+		strcpy(Name,"");
+		
+		for (int i=0;i<mNumCTs;i++) {
+			char buffer[10];
+			char numberbuffer[3];
+			if (mCustomNames == false) {
+					// Putting into the "numberbuffer" - "mNumCTs" (Number)
+				sprintf(numberbuffer,"%i",i);
+					// Copying "CTbot" to the "buffer"
+					// now "buffer" containts "CTbot"
+				strcpy(buffer,"Tbot");
+					// Add "numberbuffer" ("1") to "buffer" ("CTbot") 
+				strcat(buffer,numberbuffer);
+					// Result - "CTbot1"
+			}
+			if (mCustomNames == true) {
+				char* botConfCT = GetConfig("data/botnameT.cfg",Name + i);
+				if (botConfCT != NULL) {
+					
+					scanf("%s", buffer);
+					
+					delete botConfCT;
+				}
+			}
 
-		int type = rand()%4;
-		AI *t = new AI(gPlayersQuads[T][type], gPlayersDeadQuads[T][type], &mBullets, &mGunObjects, mMap->mNodes, T, buffer, ABSOLUTE1);
-		//t->mSpawn = mMap->mTSpawns[i];
-		//t->SetPosition(mMap->mTSpawns[i]->x,mMap->mTSpawns[i]->y);
-		//t->SetTotalRotation(M_PI_2);
-		t->mGuns[KNIFE] = new GunObject(&mGuns[0],0,0);
-		//t->mCollisionPoints = &mMap->mCollisionPoints;
-		t->mGrid = mGrid;
-		t->mPeople = &mPeople;
-		t->mAStar = mAStar;
-		t->mGameGuns = &mGuns;
-		mPeople.push_back(t);
-		//mTs.push_back(t);
-	}	
-
+			int type = rand()%4;
+			AI *t = new AI(gPlayersQuads[T][type], gPlayersDeadQuads[T][type], &mBullets, &mGunObjects, mMap->mNodes, T, buffer, ABSOLUTE1);
+			//t->mSpawn = mMap->mTSpawns[i];
+			//t->SetPosition(mMap->mTSpawns[i]->x,mMap->mTSpawns[i]->y);
+			//t->SetTotalRotation(M_PI_2);
+			t->mGuns[KNIFE] = new GunObject(&mGuns[0],0,0);
+			//t->mCollisionPoints = &mMap->mCollisionPoints;
+			t->mGrid = mGrid;
+			t->mPeople = &mPeople;
+			t->mAStar = mAStar;
+			t->mGameGuns = &mGuns;
+			mPeople.push_back(t);
+			//mTs.push_back(t);
+		}
+	}
 	/*for (int i=0;i<20;i++) {
 		char buffer[10];
 		char numberbuffer[3];

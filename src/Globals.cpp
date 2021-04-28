@@ -59,6 +59,8 @@ JSample* gFireInTheHoleSound;
 JSample* gWalkSounds[2];
 JSample* gRicochetSounds[4];
 JSample* gHitSounds[3];
+JSample* gSilencerON;
+JSample* gSilencerOFF;
 JSample* gKnifeHitSound;
 JSample* gDieSounds[3];
 JSample* gRoundEndSounds[3];
@@ -74,6 +76,7 @@ JSample* gHumiliationSound;
 JSample* gGotItSound;
 JSample* gKillSounds[4];
 JSample* gHolyShitSound;
+JSample* gBombSounds[1];
 
 KeyFrameAnim* gKeyFrameAnims[11];
 

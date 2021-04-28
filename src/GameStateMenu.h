@@ -41,8 +41,8 @@
 
 static char *mCategories[] =
 {
-	"CSPSP v1.92+",
-	"2018 rev 9.0",
+	"CSPSP v1.93",
+	"2019",
 	"",
 	"",
 	"Programming",
@@ -69,12 +69,20 @@ static char *mCategories[] =
 	"",
 	"",
 	"",
+	"",
 	"Testers",
+	"",
+	"",
 	"",
 	"",
 	"Contact",
 	"",
+	"",
+	"",
 	"Other",
+	"",
+	"",
+	"",
 	"",
 	"",
 	"",
@@ -112,11 +120,16 @@ static char *mCredits[] =
 	"fy_dodgeball - eggbom",
 	"fy_nade & de_dust2 - Xiphirx",
 	"cs_italy - Doublehawk",
+	"fy_nade2 & lasertag3 - MasterMen",
 	"",
 	"UnLuck3R",
 	"MasterMen",
+	"TrenchNoob (Beta Tester)",
+	"axerytp (Beta Tester)",
 	"",
-	"MasterMen - https://vk.com/id269129562",
+	"CSPSP VK Group - vk.com/cspspofficial",
+	"Wololo Forum - wololo.net/talk/...",
+	"...viewtopic.php?f=2&t=49816",
 	"",
 	"James Hui for his JGE++ Engine",
 	"Danzel and Jeff Chen for their input system",
@@ -124,7 +137,9 @@ static char *mCredits[] =
 	"Google for its App Engine",
 	"Vlad for his Custom master server",
 	"Kamil09875 and Goeos for program help",
-	"UnLuck3R for Source and help"
+	"",
+	"UnLuck3R for Source and help",
+	"HardPic for Programming Help",
 };
 
 
@@ -138,7 +153,7 @@ private:
 	JGuiController* mGuiController;
 	float mInfoX;
 
-	JMusic* mMusic;
+	//JMusic* mMusicMenu;
 
 	float mCreditsYPos;
 

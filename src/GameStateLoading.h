@@ -14,7 +14,8 @@ private:
 public:
 	GameStateLoading(GameApp* parent);
 	~GameStateLoading();
-
+	
+	int MusicType;
 	void Start();
 	void End();
 	void Update(float dt);

@@ -84,6 +84,8 @@ extern JSample* gFireInTheHoleSound;
 extern JSample* gWalkSounds[2];
 extern JSample* gRicochetSounds[4];
 extern JSample* gHitSounds[3];
+extern JSample* gSilencerON; // Silencers
+extern JSample* gSilencerOFF;
 extern JSample* gKnifeHitSound;
 extern JSample* gDieSounds[3];
 extern JSample* gRoundEndSounds[3];
@@ -99,6 +101,7 @@ extern JSample* gHumiliationSound;
 extern JSample* gGotItSound;
 extern JSample* gKillSounds[4];
 extern JSample* gHolyShitSound;
+extern JSample* gBombSounds[1];
 
 extern KeyFrameAnim* gKeyFrameAnims[11];
 

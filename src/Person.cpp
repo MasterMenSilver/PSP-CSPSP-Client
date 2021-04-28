@@ -31,6 +31,8 @@ Person::Person(JQuad* quads[], JQuad* deadquad, std::vector<Bullet*>* bullets, s
 	mRegenPoints = 5; //default 1 HP
 	mRegenSfxType = 0;
 	mGunMode = 0;
+	mSilencedUSP = false;
+	mSilencedM4A1 = false;
 	mLRTimer = 0.0f;
 	mComboType = 0;
 	mComboTimer = 0;
@@ -134,6 +136,19 @@ Person::Person(JQuad* quads[], JQuad* deadquad, std::vector<Bullet*>* bullets, s
 	mPartQuads[LEFTHAND] = new JQuad(texture,0,24,16,8);
 	mPartQuads[LEFTHAND]->SetHotSpot(3.5f,3.5f);
 	mPartQuads[LEFTHAND]->SetVFlip(true);*/
+	
+	mAllowRegeneration = true;
+	char* AR = GetConfig("data/MatchSettings.txt","AllowRegeneration");
+	if (AR != NULL) {
+		if (strcmp(AR,"true") == 0) {
+			mAllowRegeneration = true;
+		}
+		else if (strcmp(AR,"false") == 0) {
+			mAllowRegeneration = false;
+		}
+		delete AR;
+	}
+	
 }
 
 //------------------------------------------------------------------------------------------------
@@ -256,37 +271,45 @@ void Person::Update(float dt)
 		return;
 	}
 	
+	
+	
+	
 	//P: HEALTH REGEN (adds as HP the mRegenPoints per desired mRegenTimer)
-	if (mMoveState == NOTMOVING && mHealth != 100) {
-		mRegen += dt/1000.0f;
-		if (mRegen >= mRegenTimer) {  // + mRegenPoints HP per mRegenTimer second(s)
-			if (mHealth != 0) {
-				mRegenlol += dt/25.0f;
-				if (mRegenlol >= mRegenTimer){
-					mHealth += 1;
-					mRegenPoints -= 1;
-					mRegenlol = 0.0f;
-					if (mRegenPoints == 4) {
-					mRegenSfxType = 1;
+	if (mAllowRegeneration == true) {
+		if (mMoveState == NOTMOVING && mHealth != 100) {
+			mRegen += dt/1000.0f;
+			if (mRegen >= mRegenTimer) {  // + mRegenPoints HP per mRegenTimer second(s)
+				if (mHealth != 0) {
+					mRegenlol += dt/25.0f;
+					if (mRegenlol >= mRegenTimer){
+						mHealth += 1;
+						mRegenPoints -= 1;
+						mRegenlol = 0.0f;
+						if (mRegenPoints == 4) {
+						mRegenSfxType = 1;
+						}
+					}
+					if (mRegenPoints <= 0){
+					mRegen = 0.0f;
+					mRegenPoints = 5;
 					}
 				}
-				if (mRegenPoints <= 0){
-				mRegen = 0.0f;
-				mRegenPoints = 5;
-				}
+			}
+			if (mHealth > 100) { //for safety and bug avoidance reasons, cause it could be done otherwise, but this is optimum.
+			mHealth = 100;
+			}
+			if (mHealth == 100) {
+			mRegen = 0.0f;
 			}
 		}
-		if (mHealth > 100) { //for safety and bug avoidance reasons, cause it could be done otherwise, but this is optimum.
-		mHealth = 100;
+		if (mMoveState != NOTMOVING) {
+			mRegen = 0.0f;
+			mRegenPoints = 5;
 		}
-		if (mHealth == 100) {
-		mRegen = 0.0f;
-		}
-	}
-	if (mMoveState != NOTMOVING) {
-		mRegen = 0.0f;
-		mRegenPoints = 5;
-	}
+	} // Regen End
+	
+	
+	
 
 	mWalkAngle = mAngle;
 

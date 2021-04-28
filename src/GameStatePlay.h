@@ -57,6 +57,7 @@ private:
 	//vector<Bullet>::iterator mBulletIterator;
 
 	JMusic* mMusic;
+	
 	//JGuiController* mGuiController;
 
 	//bool cross;
@@ -68,6 +69,11 @@ public:
 	~GameStatePlay();
 	
 	int MaxMoney;
+	int MusicType;
+	int mMaxBots;
+	bool mCustomNames;
+	bool mAllowRegeneration;
+	
 
 	void Create();
 	void Destroy();
@@ -80,6 +86,7 @@ public:
 	void CheckCollisions();
 	void NewGame();
 	void ResetRound();
+	//void ResetPlayer();
 	void Explode(Grenade* grenade);
 	void StopInput();
 

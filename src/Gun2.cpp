@@ -3,7 +3,7 @@
 JSoundSystem* Gun::mSoundSystem = NULL;
 
 //------------------------------------------------------------------------------------------------
-Gun::Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, float spread, int clip, int numclips, int reloaddelay, float speed, int cost, int type, char* name)
+Gun::Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, float spread, int clip, int numclips, int reloaddelay, float speed, /*int hassilencer,*/ int cost, int type, char* name)
 {
 	mSoundSystem = JSoundSystem::GetInstance();
 	mHandQuad = handquad;
@@ -16,9 +16,11 @@ Gun::Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, floa
 	mNumClips = numclips;
 	mReloadDelay = reloaddelay;
 	mSpeed = speed;
+	//mHasSilencer = hassilencer;
 	mCost = cost;
 	mType = type;
 	strcpy(mName,name);
+	
 	char fire[25];
 	strcpy(fire,"sfx/");
 	strcat(fire,name);
@@ -27,10 +29,16 @@ Gun::Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, floa
 	char reload[25];
 	strcpy(reload,"sfx/");
 	strcat(reload,name);
-	strcat(reload,"reload.wav");	
+	strcat(reload,"reload.wav");
+	
+	//char silencer[25];
+	//strcpy(silencer,"sfx/");
+	//strcat(silencer,name);
+	//strcat(silencer,"_silenced.wav");
 
 	mFireSound = mSoundSystem->LoadSample(fire);
 	mReloadSound = mSoundSystem->LoadSample(reload);
+	//mReloadSound = mSoundSystem->LoadSample(silencer);
 
 }
 

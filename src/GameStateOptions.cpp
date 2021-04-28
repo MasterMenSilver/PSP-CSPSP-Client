@@ -1,6 +1,6 @@
 #include "GameStateOptions.h"
 
-GameStateOptions::GameStateOptions(GameApp* parent): GameState(parent) 
+GameStateOptions::GameStateOptions(GameApp* parent): GameState(parent)
 {
 	mState = GENERAL;
 	// GENERAL
@@ -96,6 +96,23 @@ void GameStateOptions::Create()
 			}
 			delete menu;
 		}
+		
+		// MusicSettings.txt
+			MusicType = 1;
+			char* MusType = GetConfig("data/MusicSettings.txt","MusicType");
+			if (MusType != NULL) {
+				if (strcmp(MusType,"1") == 0) {
+					MusicType = 1;
+				}
+				if (strcmp(MusType,"2") == 0) {
+					MusicType = 2;
+				}
+				else {
+					MusicType = 1;
+				}
+				
+				delete MusType;
+			}
 
 		Save();
 	}
@@ -419,6 +436,11 @@ void GameStateOptions::Update(float dt)
 			}
 		}
 	}
+	
+	
+	
+	
+	
 	else if (mState == GAME) {
 		if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
 			mParent->SetNextState(GAME_STATE_MENU);
@@ -429,7 +451,29 @@ void GameStateOptions::Update(float dt)
 		if (mEngine->GetButtonClick(PSP_CTRL_LTRIGGER)) {
 			mState == GENERAL;
 		}
+		
+		if(MusicType == 1) {
+			LoadMusic = 1;
+			
+		}
+		else {
+			if (mEngine->GetButtonClick(PSP_CTRL_RIGHT)) {
+				LoadMusic++;
+			}
+			if (mEngine->GetButtonClick(PSP_CTRL_LEFT)) {
+				LoadMusic--;
+			}
+		}
+		
+		if (LoadMusic > 3) { LoadMusic = 3; }
+		if (LoadMusic < 1) { LoadMusic = 1; }
+		
 	}
+	
+	
+	
+	
+	
 	else if (mState == CONTROLS) {
 		if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
 			mParent->SetNextState(GAME_STATE_MENU);
@@ -478,7 +522,7 @@ void GameStateOptions::Render()
 		mRenderer->FillRect(0,35+175,SCREEN_WIDTH,30,ARGB(175,0,0,0));
 
 		mRenderer->FillRect(80,5,98,25,ARGB(175,0,0,0)); // General
-		mRenderer->FillRect(200,5,78,25,ARGB(100,0,0,0)); // Game
+		mRenderer->FillRect(200,5,75,25,ARGB(100,0,0,0)); // Game
 		mRenderer->FillRect(305,5,92,25,ARGB(100,0,0,0)); // Controlls
 
 		gFont->SetColor(ARGB(255,255,244,53));
@@ -486,7 +530,7 @@ void GameStateOptions::Render()
 		gFont->SetColor(ARGB(255,255,255,255));
 		gFont->DrawShadowedString("Game",235,10,JGETEXT_CENTER);
 		gFont->SetColor(ARGB(255,255,255,255));
-		gFont->DrawShadowedString("Controlls",350,10,JGETEXT_CENTER);
+		gFont->DrawShadowedString("Controls",350,10,JGETEXT_CENTER);
 
 		/*gFont->SetColor(ARGB(255,255,255,0));
 		gFont->SetScale(1.0f);
@@ -564,34 +608,58 @@ void GameStateOptions::Render()
 	else if (mState == GAME) {
 		mRenderer->FillRect(0,30,SCREEN_WIDTH,5,ARGB(100,0,0,0));
 		mRenderer->FillRect(0,35,SCREEN_WIDTH,175,ARGB(100,0,0,0));
-		mRenderer->FillRect(0,35+175,SCREEN_WIDTH,30,ARGB(175,0,0,0));
+		//mRenderer->FillRect(0,35+175,SCREEN_WIDTH,30,ARGB(175,0,0,0)); It's Already Filling
 
 		mRenderer->FillRect(80,5,98,25,ARGB(100,0,0,0)); // General
-		mRenderer->FillRect(200,5,78,25,ARGB(175,0,0,0)); // Game
+		mRenderer->FillRect(200,5,75,25,ARGB(175,0,0,0)); // Game
 		mRenderer->FillRect(305,5,92,25,ARGB(100,0,0,0)); // Controlls
-
+		
+		if(MusicType == 1) {
+			LoadMusic = 1;
+			mRenderer->FillRect(0,35+175,SCREEN_WIDTH,30,ARGB(200,0,0,0)); // Filling here
+		}
+		else {
+			mRenderer->FillRect(0,35+175,SCREEN_WIDTH,30,ARGB(175,0,0,0)); // ...or here.
+		}
+		
 		gFont->SetColor(ARGB(255,255,255,255));
 		gFont->DrawShadowedString("General",130,10,JGETEXT_CENTER);
 		gFont->SetColor(ARGB(255,255,244,54));
 		gFont->DrawShadowedString("Game",235,10,JGETEXT_CENTER);
 		gFont->SetColor(ARGB(255,255,255,255));
-		gFont->DrawShadowedString("Controlls",350,10,JGETEXT_CENTER);
-
-		/*gFont->SetColor(ARGB(255,255,255,0));
+		gFont->DrawShadowedString("Controls",350,10,JGETEXT_CENTER);
+		
+		gFont->SetColor(ARGB(255,255,255,255));
+		gFont->SetScale(0.75f);
+		gFont->DrawShadowedString("Change Soundtrack to play",SCREEN_WIDTH/2,SCREEN_HEIGHT_F-50-4,JGETEXT_CENTER);
 		gFont->SetScale(1.0f);
-		gFont->DrawString("OPTIONS",155,10-2,JGETEXT_CENTER);
-
-		gFont->SetColor(ARGB(255,255,255,255));
+		gFont->SetColor(ARGB(255,0,128,255));
+		mRenderer->FillRect(0,35,SCREEN_WIDTH,25,ARGB(100,0,0,0));
+		gFont->DrawShadowedString("Track",150,38*1,JGETEXT_RIGHT);
+		if(LoadMusic == 1) {
+			gFont->SetColor(ARGB(255,255,255,255));
+			gFont->DrawShadowedString("Soundtrack 1",170,38*1,JGETEXT_LEFT);
+		}
+		if(LoadMusic == 2) {
+			gFont->SetColor(ARGB(255,255,255,255));
+			gFont->DrawShadowedString("Soundtrack 2",170,38*1,JGETEXT_LEFT);
+		}
+		if(LoadMusic == 3) {
+			gFont->SetColor(ARGB(255,255,255,255));
+			gFont->DrawShadowedString("Soundtrack 3",170,38*1,JGETEXT_LEFT);
+		}
+		
+		if(MusicType == 1 || MusicType == 2) {
+			// LoadMusic = 1;
+			gFont->SetColor(ARGB(255,255,0,0));
+			gFont->DrawShadowedString("You can't Change Soundtrack at MusicType = 1",350,38*1,JGETEXT_LEFT);
+		}
+		
 		gFont->SetScale(0.75f);
-		gFont->DrawString("CONTROLS",325,10,JGETEXT_CENTER);*/
-
-		gFont->SetScale(0.75f);
 		gFont->SetColor(ARGB(255,255,255,255));
-		//mRenderer->FillRect(0,35+index*25,SCREEN_WIDTH,25,ARGB(255,0,0,0));
 
-		gFont->DrawShadowedString("[O] Cancel and Return to Menu",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
-		// mRenderer->DrawLine(160,35,160,35+175,ARGB(255,255,255,255));
-		gFont->DrawShadowedString("Not Working Right Now...",235,138,JGETEXT_CENTER);
+		gFont->DrawShadowedString("[O] Cancel and Return to Menu     [<] [>] Change",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
+		mRenderer->DrawLine(160,35,160,35+175,ARGB(255,255,255,255));
 	}
 	
 	else if (mState == CONTROLS) {
@@ -600,7 +668,7 @@ void GameStateOptions::Render()
 			mRenderer->FillRect(0,35,SCREEN_WIDTH,205,ARGB(100,0,0,0));
 	
 			mRenderer->FillRect(80,5,98,25,ARGB(100,0,0,0)); // General
-			mRenderer->FillRect(200,5,78,25,ARGB(100,0,0,0)); // Game
+			mRenderer->FillRect(200,5,75,25,ARGB(100,0,0,0)); // Game
 			mRenderer->FillRect(305,5,92,25,ARGB(175,0,0,0)); // Controlls
 			mRenderer->RenderQuad(mControlsQuad1, 0.0f, 0.0f);
 	
@@ -610,11 +678,11 @@ void GameStateOptions::Render()
 			gFont->SetColor(ARGB(255,255,255,255));
 			gFont->DrawShadowedString("Game",235,10,JGETEXT_CENTER);
 			gFont->SetColor(ARGB(255,255,244,53));
-			gFont->DrawShadowedString("Controlls",350,10,JGETEXT_CENTER);
+			gFont->DrawShadowedString("Controls",350,10,JGETEXT_CENTER);
 			
 			gFont->SetScale(0.75f);
 			gFont->SetColor(ARGB(255,255,255,255));
-			gFont->DrawShadowedString("[Down] Page 2    [O] Cancel and Return to Menu    Controlls: In Game",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
+			gFont->DrawShadowedString("[Down] Page 2    [O] Cancel and Return to Menu    (In Game)",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 	
 			/*gFont->SetColor(ARGB(255,255,255,0));
 			gFont->SetScale(1.0f);
@@ -630,7 +698,7 @@ void GameStateOptions::Render()
 			mRenderer->FillRect(0,35,SCREEN_WIDTH,205,ARGB(100,0,0,0));
 	
 			mRenderer->FillRect(80,5,98,25,ARGB(100,0,0,0)); // General
-			mRenderer->FillRect(200,5,78,25,ARGB(100,0,0,0)); // Game
+			mRenderer->FillRect(200,5,75,25,ARGB(100,0,0,0)); // Game
 			mRenderer->FillRect(305,5,92,25,ARGB(175,0,0,0)); // Controlls
 			mRenderer->RenderQuad(mControlsQuad2, 0.0f, 0.0f);
 			
@@ -641,11 +709,11 @@ void GameStateOptions::Render()
 			gFont->SetColor(ARGB(255,255,255,255));
 			gFont->DrawShadowedString("Game",235,10,JGETEXT_CENTER);
 			gFont->SetColor(ARGB(255,255,244,53));
-			gFont->DrawShadowedString("Controlls",350,10,JGETEXT_CENTER);
+			gFont->DrawShadowedString("Controls",350,10,JGETEXT_CENTER);
 			
 			gFont->SetScale(0.75f);
 			gFont->SetColor(ARGB(255,255,255,255));
-			gFont->DrawShadowedString("[Up] Page 1    [O] Cancel and Return to Menu    Controlls: Spectator",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
+			gFont->DrawShadowedString("[Up] Page 1    [O] Cancel and Return to Menu    (Spectator)",SCREEN_WIDTH_2,SCREEN_HEIGHT_F-20,JGETEXT_CENTER);
 	
 		}
 	}
@@ -689,7 +757,21 @@ void GameStateOptions::Save()
 	fputs(name,file);
 	fputs("\r\n",file);
 
-	fputs("map = gunstest\r\n",file);	
+	fputs("map = gunstest\r\n",file);
+	
+	if(LoadMusic == 1) {
+		fputs("LoadMusic = 1\r\n",file);
+		fputs("Old_Music = 1", file);
+	}
+	if(LoadMusic == 2) {
+		fputs("LoadMusic = 2\r\n",file);
+		fputs("Old_Music = 2", file);
+	}
+	if(LoadMusic == 3) {
+		fputs("LoadMusic = 3\r\n",file);
+		fputs("Old_Music = 3", file);
+	}
+	
 	fclose(file);
 }
 

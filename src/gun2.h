@@ -4,6 +4,7 @@
 #define PRIMARY 0
 #define SECONDARY 1
 #define KNIFE 2
+#define BOMB 4
 
 #include "JSoundSystem.h"
 //------------------------------------------------------------------------------------------------
@@ -25,6 +26,7 @@ public:
 	int mNumClips;
 	int mReloadDelay;
 	float mSpeed;
+	//int mHasSilencer;
 	int mCost;
 	int mType;
 	char mName[15];
@@ -34,7 +36,7 @@ public:
 
 public:
 
-	Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, float spread, int clip, int numclips, int reloaddelay, float speed, int cost, int type, char* name);
+	Gun(JQuad *handquad, JQuad *groundquad, int id, int delay, int damage, float spread, int clip, int numclips, int reloaddelay, float speed, /*int hassilencer */ int cost, int type, char* name);
 	~Gun();
 
 	void SetQuad(JQuad *quad);

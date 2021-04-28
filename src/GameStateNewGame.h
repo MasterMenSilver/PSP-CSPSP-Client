@@ -17,9 +17,32 @@
 #define TDM 0
 #define CTF 1
 #define FFA 2
+#define ZM 3
 
 #define Map 0
-#define GaM 1
+#define Set 1
+
+#define NGGame 0
+#define NGBots 1
+#define NGRules 2
+
+	#define NGGamemode 0
+	#define NGTime 1
+
+
+	#define NGMaxBots 0
+	#define NGAllowCustomName 9
+	#define NGDifficulty 0
+
+		#define NoHarm 0
+		#define Easy 1
+		#define Medium 2
+		#define Hard 3
+	
+	#define NGAllowRegen 0
+	
+		#define NGRegenTime 0
+		#define NGRegenHP 1
 
 #endif
 
@@ -58,14 +81,31 @@ private:
 	char mSearchString[256];
 	bool mMatch;
 	int mMatchIndex;
+	
+	
 
 public:
 	GameStateNewGame(GameApp* parent);
 	~GameStateNewGame();
 	
-	int mState;
-	int GM;
-
+	int NGmState;
+	int NGmPage;
+	
+		int NGmGame;
+		int NGmBots;
+		int NGmRules;
+		
+			int NGGameTime;
+			int GM;
+			
+			int MaxBots;
+			bool CustomNames;
+			int BotDiff;
+			
+			bool AllowRegeneration;
+			int RegenerationTime;
+			int HealthPerRegeneration;
+	
 	void Create();
 	void Destroy();
 	void Start();

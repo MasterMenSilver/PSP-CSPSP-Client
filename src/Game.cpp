@@ -970,6 +970,20 @@ void Game::CheckCollisions()
 						}
 					}
 				}
+				
+				std::vector<Teleport>* teleportzones = NULL;
+				teleportzones = &(mMap->mTeleportZones);
+				if (teleportzones != NULL) {
+					for (int j=0; j<teleportzones->size(); j++) {
+						if (person1->mX >= (*teleportzones)[j].x1 && person1->mX <= (*teleportzones)[j].x2 && person1->mY >= (*teleportzones)[j].y1 && person1->mY <= (*teleportzones)[j].y2) {
+							//person1->mX = mMap->mTeleportZones;
+							//person1->mY = mMap->mTeleportZones;
+							break;
+						}
+					}
+				}
+						
+				
 
 				for (unsigned int j=0; j<mGrid->mCells[cell].mCollisionLines.size(); j++) {
 					if (mGrid->mCells[cell].mCollisionLines[j]->people != true) continue;
@@ -1248,9 +1262,11 @@ void Game::Update(float dt)
 {
 	mGrid->ClearCells();
 	
-	if (mPlayer->mRegenSfxType == 1) {
-	gSfxManager->PlaySample(gRegenSound);
-	mPlayer->mRegenSfxType = 0;
+	if (mAllowRegeneration == true) {
+		if (mPlayer->mRegenSfxType == 1) {
+			gSfxManager->PlaySample(gRegenSound);
+			mPlayer->mRegenSfxType = 0;
+		}
 	}
 
 	if (mTipTime >= 0 && mTipType == 0) {
@@ -1291,10 +1307,14 @@ void Game::Update(float dt)
 	mMap->Update(dt*mTimeMultiplier);
 	gParticleEngine->Update(dt*mTimeMultiplier);
 
-	if (mGameType == FFA || mGameType == CTF) {
+	if (mGameType == FFA || mGameType == CTF && mPlayer->mState == DEAD) {
 		mRespawnTimer -= dt*mTimeMultiplier;
 		if (mRespawnTimer < 0.0f) {
 			mRespawnTimer = 0.0f;
+			// Respawn Player
+			ResetPlayer();
+			mCamera->mX = mPlayer->mX;
+			mCamera->mY = mPlayer->mY;
 		}
 	}
 
@@ -2042,7 +2062,7 @@ void Game::Render()
 		mRenderer->RenderQuad(gHealthBorderQuad,10,SCREEN_HEIGHT-58);
 		mRenderer->RenderQuad(gHealthFillQuad,10,SCREEN_HEIGHT-58+44-height+2);
 
-		if (mPlayer->mHealth > 20) {
+		if (mPlayer->mHealth > 25) {
 			gFont->SetColor(ARGB(255,255,255,255));
 		}
 		else {
@@ -2162,7 +2182,7 @@ void Game::Render()
 					}
 					mRenderer->FillRect(SCREEN_WIDTH-10-128+4,SCREEN_HEIGHT-29,120,15,ARGB(255,50,50,50));
 					mRenderer->FillRect(SCREEN_WIDTH-14-width,SCREEN_HEIGHT-29,width,15,ARGB(255,255,255,255));
-					gFont->DrawShadowedString("reloading", SCREEN_WIDTH-10-64,SCREEN_HEIGHT-28,JGETEXT_CENTER);
+					gFont->DrawShadowedString("Reloading", SCREEN_WIDTH-10-64,SCREEN_HEIGHT-28,JGETEXT_CENTER);
 				}
 				else {
 					int clip = currentGun->mGun->mClip;
@@ -3078,7 +3098,7 @@ void Game::Render()
 		char buffer[132];
 		strcpy(buffer,"");
 		if (mIsTeamOnlyChat) {
-			strcat(buffer,"(team) ");
+			strcat(buffer,"(TEAM) ");
 		}
 		strcat(buffer,"say: ");
 		strcat(buffer,mChatString);
@@ -3228,8 +3248,16 @@ void Game::UpdateScores(Person* attacker, Person* victim, Gun* weapon) {
 	if (mGameType == FFA || mGameType == CTF) {
 		if (victim == mPlayer) {
 			mRespawnTimer = mRespawnTime*1000;
+			
+			if(mRespawnTimer == 0.0) {
+				ResetPlayer();
+				mCamera->mX = mPlayer->mX;
+				mCamera->mY = mPlayer->mY;
+			}
+			
 		}
 	}
+	
 	else if (mGameType == TEAM) {
 		if (victim->mTeam == CT) {
 			mNumRemainingCTs--;
@@ -3263,6 +3291,62 @@ void Game::UpdateScores(Person* attacker, Person* victim, Gun* weapon) {
 	//can't resort since loops.
 	mSort = true;
 }
+
+void Game::ResetPlayer() {
+	
+	mSpecState = THIRDPERSON;
+	mRespawnTime = 8;
+	mRespawnTimer = 8000.0f;
+	mTimeMultiplier = 1.0f;
+	mPeople.push_back(mPlayer);
+	
+	mHud->mPlayer = mPlayer;
+	
+	int ctspawnindex = rand()%mMap->mNumCTs;
+	int tspawnindex = rand()%mMap->mNumTs;
+	
+	bool isDead = (mPlayer->mState == DEAD)? true:false;
+	
+	mPlayer->Reset();
+	
+	if (mPlayer->mTeam == CT) {
+		mPlayer->Teleport(mMap->mCTSpawns[ctspawnindex]->x,mMap->mCTSpawns[ctspawnindex]->y);
+		ctspawnindex++;
+		if (ctspawnindex >= mMap->mNumCTs) {
+			ctspawnindex = 0;
+		}
+	}
+	else {
+		mPlayer->Teleport(mMap->mTSpawns[tspawnindex]->x,mMap->mTSpawns[tspawnindex]->y);
+		tspawnindex++;
+		if (tspawnindex >= mMap->mNumTs) {
+			tspawnindex = 0;
+		}
+	}
+	if (isDead) {
+			Gun* gun;
+			if (mPlayer->mTeam == CT) {
+				gun = &mGuns[2];
+			}
+			else if(mPlayer->mTeam == T) {
+				gun = &mGuns[1];
+			}
+	}
+	
+	if (mPlayer->mTeam != NONE) {
+		mCamera->mX = mPlayer->mX;
+		mCamera->mY = mPlayer->mY;
+	}
+	
+	if (mPlayer->mMoney < 3400) {
+		mPlayer->mMoney += 1000;
+		if (mPlayer->mMoney > 3400) {
+			mPlayer->mMoney = 3400;
+		}
+	}
+	
+}
+
 void Game::NewSpec(Person* attacker, int index) {
 	if (mSpec == mPlayer) {
 		//if (attacker->mState != DEAD) {
@@ -3371,6 +3455,7 @@ void Game::Buy(int index) {
 					//mPlayer->mGunIndex = SECONDARY;
 					mPlayer->Switch(SECONDARY);
 				}
+				
 				gSfxManager->PlaySample(gPickUpSound, mPlayer->mX, mPlayer->mY);
 			}
 			else {

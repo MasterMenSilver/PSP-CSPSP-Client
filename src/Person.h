@@ -117,10 +117,13 @@ public:
 	float mRegen;
 	float mRegenlol;
 	float mRegenTimer;
+	bool mAllowRegeneration;
 	int mLRTimer;
 	int mRegenPoints;
 	int mRegenSfxType;
 	int mGunMode;
+	bool mSilencedUSP;
+	bool mSilencedM4A1;
 	int mComboType;
 	float mComboTimer;
 

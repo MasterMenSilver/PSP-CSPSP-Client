@@ -24,14 +24,33 @@ void GameStateMenu::Create()
 		mGuiController->Add(new MenuItem(4, gFont, "Credits", SCREEN_WIDTH-20, 205, TYPE_MAIN, JGETEXT_RIGHT));
 		mGuiController->Add(new MenuItem(5, gFont, "Leave", SCREEN_WIDTH-20, 230, TYPE_MAIN, JGETEXT_RIGHT));
 	}
+	
+	/*
+	#ifdef WIN32
+	mMusicMenu = mSoundSystem->LoadMusic("sfx/Music/MenuTheme.mp3");
+	#else
+	MP3_Init(1);
+	MP3_Load("sfx/Music/MenuTheme.mp3");
+	#endif
+	*/
 }
 void GameStateMenu::Destroy()
 {
 	SAFE_DELETE(mGuiController);
-
+	/*
+	SA FE_DELETE(mMusicMenu);
+	
 	/**if (mMusic)
-		mEngine->FreeMusic(mMusic);**/
-
+		mEngine->FreeMusic(mMusic);
+	
+	#ifdef WIN32
+	//mEngine->StopMP3();
+	//mEngine->FreeMP3();
+	#else
+	MP3_Stop();
+    MP3_FreeTune();
+	#endif
+	*/
 }
 
 
@@ -52,12 +71,15 @@ void GameStateMenu::Start()
 		mEngine->PlayMusic(mMusic);
 		mEngine->SetVolume(64);
 	}**/
+				
 }
 
 
 void GameStateMenu::End()
 {
 	mRenderer->EnableVSync(false);
+	
+	//SAFE_DELETE(mMusicMenu);
 
 	/**if (mMusic)
 	{
@@ -65,6 +87,15 @@ void GameStateMenu::End()
 		mEngine->FreeMusic(mMusic);		// need to free the music to stop it, bug in mikmodlib
 		mMusic = NULL;
 	}**/
+	/*
+	#ifdef WIN32
+	mSoundSystem->StopMusic(mMusic);
+	#else
+	//mSoundSystem->StopMusic(mMusic);
+	MP3_Stop();
+	//MP3_FreeTune();
+	#endif
+	*/
 }
 
 
@@ -100,7 +131,7 @@ void GameStateMenu::Update(float dt)
 				mCreditsYPos -= 0.08f*dt;
 			}
 			if (mEngine->GetButtonState(PSP_CTRL_SQUARE)) {
-				mCreditsYPos -= 0.0f;
+				mCreditsYPos -= 0.0f*dt;
 			}
 			if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
 				mStage = STAGE_MENU;
@@ -159,7 +190,8 @@ void GameStateMenu::Render()
 		gFont->SetColor(ARGB(255,200,200,200));
 		gFont->SetScale(0.6f);
 		char buffer[10];
-		sprintf(buffer,"%.2f",VERSION);
+		//sprintf(buffer,"%.2f",VERSION);
+		sprintf(buffer,"1.93");
 		gFont->DrawString(buffer,SCREEN_WIDTH-4,SCREEN_HEIGHT-12,JGETEXT_RIGHT);
 	}
 	else if (mStage == STAGE_CREDITS)

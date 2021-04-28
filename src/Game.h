@@ -17,7 +17,6 @@
 #include "TeamMenu.h"
 #include "Grid.h"
 
-
 #define TIE 2
 #define SERVER -2
 #define NONE -1
@@ -76,6 +75,7 @@ public:
 	float mRoundEndTimer;
 	float mBuyTimer;
 	int mRoundState;
+	bool mAllowRegeneration;
 
 	int mNumRounds;
 	int mNumCTWins;
@@ -161,7 +161,8 @@ public:
 	virtual void Update(float dt);
 	virtual void Render();
 	virtual void UpdateCamera(float dt);
-
+	
+	void ResetPlayer();
 	void UpdateScores(Person* attacker, Person* victim, Gun* weapon);
 	void NewSpec(Person* attacker, int index);
 	virtual void Buy(int index);

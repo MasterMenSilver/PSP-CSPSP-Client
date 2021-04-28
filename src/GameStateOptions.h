@@ -43,6 +43,8 @@ private:
 	bool main;
 	int movementstyle;
 	int music;
+	int LoadMusic;
+	int MusicType;
 	int friendlyfire;
 	int menustyle;
 	char name[16];
