@@ -1,12 +1,35 @@
+Links:
+Wololo: http://wololo.net/talk/viewtopic.php?f=2&t=49816&p=424694#p424694
+VK Group: https://vk.com/cspspofficial
+Discord Server: https://discord.gg/9nbfdv5QNK
+YouTube: https://www.youtube.com/channel/UCHXvTt5-qVkstYNekBBYyaw
+
 -------------------------- MasterMen's Update:--------------------------
 
-CSPSP 1.92 rev 9.0 (2018.05.01)
+CSPSP 1.93 (2018.07.02)
+[ADDED] Ability to Change Time in-Game
+[ADDED] Ability to Change Bots Count
+[ADDED] Ability to change OFF/ON health regeneration
+[ADDED] Ability to change Soundtrack
+[ADDED] 2nd and 3rd Soundtrack
+[ADDED] New Map - FY_NADE2
+[ADDED] New Map - LASTERTAG3
+[CHANGED] Every weapon's bullet speed is now +0.2
+[CHANGED] Credits (Testers, Other, Maps, Title)
+[FIXED] CS_ITALY waypoints
+[REMOVED] Ability to switch Game Modes (CTF and FFA is not working correctly with bots (I mean it's useless in singleplayer) )
+
+* After i will end working on Game modes with bots i will enable that ability.
+* Custom Bot Nicknames are not currently working, but you can enable it.
+* There are silencers on M4A1 and USP, but it's useless right now.
+
+
+CSPSP 1.92+ rev 9 (2018.05.01)
 [ADDED] Ability to change Game Modes
 [ADDED] New page in the options (it's useless)
 [ADDED] Custom changing round's time (you will need to edit file "GameSettings.cfg")
 [ADDED] Ability to change controlls information: In-game, spectator.
 [ADDED] "Contact" information in credits
-[ADDED] Changelog (lol)
 [CHANGED] Credits menu
 [CHANGED] P90's Damage +2 (14 Damage)
 [CHANGED] Page selection's button from white to yellow
@@ -23,9 +46,13 @@ CSPSP 1.92 rev 9.0 (2018.05.01)
 CSPSP 1.92+ rev7.1
 vCMS is back!!!(Vlad's Custom Master Server, now with full support I think)
 
+
+
 CSPSP 1.92+ rev7
 -improved GunMode and change ''how to turn it on/off''.(old: dir-pad left / new: hold L+R)
 -added Kill effect (sound and hud)
+
+
 
 CSPSP 1.92+ rev6
 -added some Fun stuff (when u kill someone by knife, it will appear "Humiliation!!!" sound and Hud etc.)
@@ -35,9 +62,24 @@ CSPSP 1.92+ rev6
 -added and improved HP Regeneration.(thanks Peris and Kamil)
 -master server re-open again. :D (this time was set up by tinyland.co)
 
+
+
 CSPSP 1.92+ rev5
 -updated admin menu.
 -updated dying tips.
+
+
+
+CSPSP 1.92+ rev6
+-Fix the Snipe Mode's bug.(fix when new round start still in snipe mode)
+-now you can see the other guys using snipe (u couldnt see it before, it was a major bug) still not fix yet...
+
+
+
+CSPSP 1.92+ rev5
+-fixed Snipe modes's bug, again.
+
+
 
 CSPSP 1.92+ r1,r2,r3,r4
 -bots can buy ammo.
@@ -49,25 +91,194 @@ CSPSP 1.92+ r1,r2,r3,r4
 -added Snipe mode.
 -added dying tips.
 
-CSPSP 1.92+ rev6
--Fix the Snipe Mode's bug.(fix when new round start still in snipe mode)
--now you can see the other guys using snipe (u couldnt see it before, it was a major bug) still not fix yet...
-
-CSPSP 1.92+ rev5
--fixed Snipe modes's bug, again.
-
 CSPSP 1.92+ rev4
 -Fixed Snipe mode's minor bug.
 -delete system message.(many player dont like it :( )
 
+
+
 CSPSP 1.92+ rev3
 -Fixed AWP and other snipe guns are too strong problem.
+
+
 
 CSPSP 1.92+ rev2
 -Fix Bluescreen bug.
 -Fix bug that you couldnt hear roundstart sound in multiplayer mode.
 
-This is not really the major update,
-so i named it CSPSP 1.92+.
-and im not the programmer/developer.
-but im the CSPSP's fan,
+
+
+
+* This is not really the major update,
+* so i named it CSPSP 1.92+.
+* and im not the programmer/developer.
+* but im the CSPSP's fan.
+
+
+-------------------------- nataku92's Updates: --------------------------
+
+
+CSPSP v1.92 Update (11:10 AM - Sep 13, 2011)
+
+   -hopefully fixed the name mixup problem
+   -added ability to signin to account with another psp
+   -fixed a bug that was potentially removing players from a server during map downloading  
+   -potentially fixed the freezing bug during map downloading
+   -tweaked networking code to be more robust (and caught a few bugs); also fixed major exploits (speedhacking, infinite ammo, etc.)
+   -added check for tempAR (not allowed in multiplayer)
+   -added a menu for server admins to kick/ban players more easily
+   -added graphical gun delay indicator
+   -added a time slowdown effect at the end of a round
+   -fixed the bug in ffa where spectators' scores weren't being reset on new round
+   -added a limit on the rate of chat messages (to prevent spamming)
+   -bots will now buy their weapons when they have enough money
+   -added exception handler (debugging info should now be printed during a crash)
+   -fixed a memory leak with the player icons
+   -fixed a potential divide-by-zero bug
+   -removed idstorage requirement (so CSPSP should run with HBL now - untested...)
+   -fixed a bug where half downloaded maps weren't being correctly deleted
+   -tweaked the server list pinging
+   -v1.91 fixes a small bug with updating profile info
+
+
+- v1.82 UPDATE- (4:54 AM - Jan 08, 2011)
+
+   Actually fixed bug where the round end message would display at the wrong time
+   Fixed a bug where the score sheet would not show more than 10 players in ffa
+   Fixed a small bug where the displayed respawn timer would be incorrect
+
+   Fixed bug where the round would end while players are still alive
+   Fixed a bug where grenades were not dropped on death
+   Added more error checking when reading packets
+   Added some error checking in game lobby (should hopefully prevent some freezing)
+   Implemented temporary invincibility on respawn
+   Implemented default gun config on respawn
+
+
+
+
+- v1.8 UPDATE- (6:46 PM - Dec 26, 2010)
+
+   Added Capture the Flag and Free for All gameplay modes (multiplayer only)!
+   Included a new map 'flagrunnner'
+   Fixed the purple screen bug (hopefully)
+   Fixed a potential map downloading bug
+   Added score indicator icons
+
+
+
+- v1.72 UPDATE- (6:17 AM - Aug 24, 2010)
+
+   Added the ability to change the in-game team select and buy menus to use the directional pad instead of analog
+   Added limits against invalid characters in text (should fix the freezing on the server list)
+   Made the game recognize a map as different from the server's if it has no overview.png
+
+
+
+- v1.7 UPDATE-
+
+   Redid graphical style and some layouts for menus
+   Redid most of the graphics for the HUD (health bar, radar, buyzone, etc.)
+   Redid a lot of the networking code (fixed some major bugs)
+   Implemented shadowed strings that are MUCH easier to read
+   Added background tile option for maps
+   Added map overview feature for maps
+   Made enemies appear on radar when they fire
+   Added animated feet for the players
+   Implemented hit/damage indicators (useful in multiplayer)
+   Added muzzle flash
+   Added reload animations
+   Slightly updated gun graphics
+   Improved score screen with mutliple mages so you can see everyone
+   Added camera shake during explosions
+   Removed HE grenade damage through walls
+   Improved collision detection system (no more glitching and bullets going through walls)
+   Updated bullet graphics
+   Implemented a more convenient selection method for team select and buy menus
+   Updated the default guns.txt (knife and HE grenade damage increased)
+   Made nade still go off if you die while throwing it
+   Implemented team chat
+   Moved reloading bar and changed throwing grenade bar
+   Changed initial loading bar style
+   Implemented customizable player icons in multiplayer
+   Added player profile to player info screen
+   Added a lock to nearest player feature for freelook
+   Implemented view angle value for guns (sniper rifles have it on by default)
+   Made player names display over teammates (and everyone when in spectator)
+   Updated secondary animations (hands are together now)
+   Implemented ability to disable ratios
+   Fixed bug where terrorists win when there are 0 people left (regardless of who dies)
+   Added "_ killed you" and "you killed _" message to the HUD
+   Implemented a change team option in the in-game pause menu
+   Fixed a freezing bug in the spectating code
+   Fixed a mistake in the credits
+   Added a new map (cs_italy by Doublehawk)
+   Removed "quit game" option
+
+
+
+- v1.71 UPDATE-
+
+   *DEAD* and (team) are now displayed correctly
+   Fixed some bugs with map downloading (should be faster now)
+   Fixed bug with incorrect player profile info
+   Fixed freezing bug when leaving connection screen
+   Removed unnecessary delay when downloading updates
+
+
+- v1.61 UPDATE-
+
+   Fixed a bug in the server list
+   Updated compatibility with CSPSP Server v1.21
+   Added a few security fixes
+
+
+
+- v1.6 UPDATE-
+
+   Fixed the majority of freezing bugs
+   Removed the 64 maps limit
+   Fixed the bug where all weapons were dropped on death
+   Implemented buyzones
+   Fixed the bug where your own ammo would increase when someone else was buying ammo
+   Added a simple loading bar
+   Implemented a new animation system for players (which also means slightly different player gfx)
+   Added "Overwrite Map" option when your map differs from the server's.
+   Added bullet speed to the guns config file (sniper rifle bullets are now as default 2x as fast)
+   Added some alert messages when buying (not enough money, buying time ended, etc.)
+   ***Redid most of the Online Lobby; implemented an account system (with friends lists)***
+
+
+
+- v1.56 UPDATE-
+
+   Fixed a bug in the server list pinging code
+   Map files are now deleted if the download is cancelled before completing (prevents crashes when trying to redownload the same map)
+   Fixed a bug that prevented properly putting the PSP in sleep mode while the game was running
+   Implemented grenades (you can only carry one grenade at a time though)
+   Added the highlighted gun's image and cost to the buy menu
+   Implemented a simple decal system for blood and explosion marks
+   Implemented a grid partitioning system to optimize collision detection (larger, more complicated maps don't slow down as much now)
+   Fixed a bug that made the remaining ammo count after reloading inaccurate
+   Made the camera less jerky during variations in frames per second
+   Added a map check that gives an error message when the map and the server's map don't match (this should also catch half downloaded maps that would have otherwise crashed the game)
+   Fixed a bug in the knife collision check when more than two players were in contact
+   Redid a lot of the bot code (they should now detect when they get stuck and try to move away)
+   Implemented A* pathfinding (bots can actually find each other now instead of moving randomly)
+   Made waypoints optional (bots won't move on maps without waypoints)
+   Fixed a few other bugs
+
+
+
+- v1.55 UPDATE- (9:31 AM - Jun 18, 2008)
+
+   3.xx firmware support (haven't tested on slim, but it should work)
+   Fixed server list (hopefully)
+   Fixed bug where only part of the server list is downloaded.
+   Redid a lot of the networking and added client-side prediction to make online play smoother and less buggy
+   Automatic map downloads when connection to servers
+   Made the scoreboard only show the top 4 players in each team
+   Music reimplemented (but causes some lag)
+   Chat now shows if the person is dead/spectating
+   Added more sounds (walk, ricochet, pickup, ammo, hit, knife hit, die, ct win, t win, round draw)
+   New update system

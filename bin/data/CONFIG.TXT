@@ -4,3 +4,5 @@ ff = off
 menu = analog
 name = MasterMen
 map = gunstest
+LoadMusic = 1
+Old_Music = 1

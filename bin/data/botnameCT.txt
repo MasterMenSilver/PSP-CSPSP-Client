@@ -1,36 +1,69 @@
 0 = Albert
+
 1 = Allen
+
 2 = Bert
+
 3 = Bob
+
 4 = Cecil
+
 5 = Clarence
+
 6 = Elliot
+
 7 = Elmer
+
 8 = Ernie
+
 9 = Eugene
+
 10 = Fergus
+
 11 = Ferris
+
 12 = Frank
+
 13 = Frasier
+
 14 = Fred
+
 15 = George
+
 16 = Graham
+
 17 = Harvey
+
 18 = Irwin
+
 19 = Lester
+
 20 = Marvin
+
 21 = Neil
+
 22 = Niles
+
 23 = Oliver
+
 24 = Opie
 25 = Toby
+
 26 = Ulric
+
 27 = Ulysses
+
 28 = Uri
+
 29 = Waldo
+
 30 = Wally
+
 31 = Walt
+
 32 = Wesley
+
 33 = Yanni
+
 34 = Yogi
 35 = Yuri

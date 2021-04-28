@@ -1,0 +1,6 @@
+Gamemode = TDM
+RoundTime = 12
+MaxBots = -1
+CustomNames = false
+AllowRegeneration = false
+maxMoney = 16000

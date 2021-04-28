@@ -1,0 +1,5 @@
+Music3 is an Example for you, you can change it in the future.
+but please don't make Music file at 64kbps and less.
+This files will crash your PSP!
+
+Good Luck with Modding!
