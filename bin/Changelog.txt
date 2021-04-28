@@ -6,7 +6,7 @@ YouTube: https://www.youtube.com/channel/UCHXvTt5-qVkstYNekBBYyaw
 
 -------------------------- MasterMen's Update:--------------------------
 
-CSPSP 1.93 (2018.07.02)
+CSPSP 1.93 (2019.07.02)
 [ADDED] Ability to Change Time in-Game
 [ADDED] Ability to Change Bots Count
 [ADDED] Ability to change OFF/ON health regeneration
